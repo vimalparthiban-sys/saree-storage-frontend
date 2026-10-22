@@ -94,31 +94,35 @@ const ProductDemoSection = ({ product }) => {
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs">
-            <div className="grid grid-cols-12 bg-slate-900 text-white p-4 sm:p-5 text-xs sm:text-sm font-bold items-center">
-              <div className="col-span-4 text-slate-300 uppercase tracking-wider text-[11px]">Key Feature</div>
-              <div className="col-span-4 text-amber-400 font-extrabold">{comparison.colWinner}</div>
-              <div className="col-span-4 text-slate-400">{comparison.colLoser}</div>
-            </div>
-
-            <div className="divide-y divide-slate-200">
-              {comparison.rows.map((row, idx) => (
-                <div key={idx} className="grid grid-cols-12 p-4 text-xs sm:text-sm items-center hover:bg-slate-50 transition">
-                  <div className="col-span-4 font-bold text-slate-900 pr-2">{row.feature}</div>
-                  <div className="col-span-4 text-slate-800 font-medium flex items-start gap-2 pr-2">
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
-                    </div>
-                    <span className="text-emerald-950 font-semibold text-xs sm:text-sm">{row.winner}</span>
-                  </div>
-                  <div className="col-span-4 text-slate-500 flex items-start gap-2">
-                    <div className="w-5 h-5 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center shrink-0 mt-0.5">
-                      <X className="w-3.5 h-3.5 stroke-[3]" />
-                    </div>
-                    <span className="text-xs sm:text-sm">{row.loser}</span>
-                  </div>
+          <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 overflow-hidden shadow-xs">
+            <div className="overflow-x-auto">
+              <div className="min-w-[550px]">
+                <div className="grid grid-cols-12 bg-slate-900 text-white p-4 sm:p-5 text-xs sm:text-sm font-bold items-center">
+                  <div className="col-span-4 text-slate-300 uppercase tracking-wider text-[11px]">Key Feature</div>
+                  <div className="col-span-4 text-amber-400 font-extrabold">{comparison.colWinner}</div>
+                  <div className="col-span-4 text-slate-400">{comparison.colLoser}</div>
                 </div>
-              ))}
+
+                <div className="divide-y divide-slate-200">
+                  {comparison.rows.map((row, idx) => (
+                    <div key={idx} className="grid grid-cols-12 p-3 sm:p-4 text-xs sm:text-sm items-center hover:bg-slate-50 transition">
+                      <div className="col-span-4 font-bold text-slate-900 pr-2">{row.feature}</div>
+                      <div className="col-span-4 text-slate-800 font-medium flex items-start gap-2 pr-2">
+                        <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                        </div>
+                        <span className="text-emerald-950 font-semibold text-xs sm:text-sm">{row.winner}</span>
+                      </div>
+                      <div className="col-span-4 text-slate-500 flex items-start gap-2">
+                        <div className="w-5 h-5 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center shrink-0 mt-0.5">
+                          <X className="w-3.5 h-3.5 stroke-[3]" />
+                        </div>
+                        <span className="text-xs sm:text-sm">{row.loser}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
