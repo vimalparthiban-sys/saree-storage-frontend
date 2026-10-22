@@ -29,12 +29,12 @@ const Navbar = () => {
         {/* Desktop Quick Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
           <a href="#demo" className="hover:text-amber-700 transition">3-Step Demo</a>
-          <a href="#packs" className="hover:text-amber-700 transition">Packs & Pricing</a>
           <button onClick={() => setIsSizeGuideOpen && setIsSizeGuideOpen(true)} className="hover:text-amber-700 transition cursor-pointer">
             Size Guide (66L vs 100L)
           </button>
           <a href="#comparison" className="hover:text-amber-700 transition">Steel vs Cloth</a>
-          <a href="#reviews" className="hover:text-amber-700 transition">Reviews (4.9★)</a>
+          <a href="#packs" className="hover:text-amber-700 transition">Track Your Orders</a>
+          <a href="#reviews" className="hover:text-amber-700 transition">Contact Us</a>
         </nav>
 
         {/* Right Actions: Auth + Admin + Cart */}

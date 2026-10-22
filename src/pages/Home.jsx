@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import FeatureHighlights from '../components/FeatureHighlights';
 import InstallationDemo from '../components/InstallationDemo';
 import WhySteelFrame from '../components/WhySteelFrame';
+import NewsletterBanner from '../components/NewsletterBanner';
 import Footer from '../components/Footer';
 import CartDrawer from '../components/CartDrawer';
 import CheckoutModal from '../components/CheckoutModal';
@@ -90,13 +91,17 @@ const Home = () => {
                 className="bg-white border border-slate-200 text-xs font-semibold text-slate-700 px-3 py-2 rounded-xl cursor-pointer focus:outline-hidden"
               >
                 <option value="featured">Sort by: Featured</option>
+                <option value="price-high">Most Relevant</option>
+                <option value="price-high">Best Selling</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
+                <option value="price-high">Alphabetical A-Z</option>
+                <option value="price-high">Alphabetical Z-A</option>
               </select>
             </div>
           </div>
 
-          {/* Quick Color Filters */}
+          {/* Quick Color Filters
           <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
             <span className="text-slate-400 font-medium">Quick Filter:</span>
             <button
@@ -131,7 +136,7 @@ const Home = () => {
             >
               Pastel Pink
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* 3. Product Catalog Grid (Clicking takes user to Product Detail Page) */}
@@ -205,6 +210,9 @@ const Home = () => {
         <WhySteelFrame />
 
       </main>
+
+      {/* Newsletter Lead Generation Banner */}
+      <NewsletterBanner />
 
       <Footer />
 

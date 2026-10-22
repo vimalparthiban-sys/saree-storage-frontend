@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
+import NewsletterBanner from '../components/NewsletterBanner';
 import Footer from '../components/Footer';
 import CartDrawer from '../components/CartDrawer';
 import CheckoutModal from '../components/CheckoutModal';
@@ -354,6 +355,9 @@ const ProductDetail = () => {
         </div>
 
       </main>
+
+      {/* Newsletter Lead Generation Banner */}
+      <NewsletterBanner />
 
       <Footer />
       

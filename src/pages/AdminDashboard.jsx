@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Shield, DollarSign, Clock, CheckCircle } from 'lucide-react';
+import { Shield, DollarSign, Clock, CheckCircle, Mail, Copy, Check, Send } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { isAdmin, openAuth } = useAuth();
   const { orders, updateOrderStatus } = useCart();
-  const [activeTab, setActiveTab] = useState('orders'); // 'orders' or 'inventory'
+  const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'inventory', or 'newsletter'
   const [futureProductActive, setFutureProductActive] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Read subscribers
+  const [subscribers, setSubscribers] = useState(() => {
+    const saved = localStorage.getItem('saree_newsletter_subscribers');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, email: 'anithasundar@gmail.com', date: '2026-10-22T09:15:00', source: 'Home Footer Banner' },
+      { id: 2, email: 'priya.k@outlook.com', date: '2026-10-21T18:40:00', source: 'Product Detail Page' },
+      { id: 3, email: 'lavanya.chennai@yahoo.com', date: '2026-10-20T14:22:00', source: 'Festive Popup' }
+    ];
+  });
+
+  useEffect(() => {
+    const checkSubscribers = () => {
+      const saved = localStorage.getItem('saree_newsletter_subscribers');
+      if (saved) setSubscribers(JSON.parse(saved));
+    };
+    checkSubscribers();
+    window.addEventListener('storage', checkSubscribers);
+    return () => window.removeEventListener('storage', checkSubscribers);
+  }, []);
 
   if (!isAdmin) {
     return (
@@ -39,6 +60,13 @@ const AdminDashboard = () => {
   const pendingOrders = orders.filter((o) => o.status === 'PROCESSING').length;
   const shippedOrders = orders.filter((o) => o.status === 'SHIPPED' || o.status === 'DELIVERED').length;
 
+  const handleCopyEmails = () => {
+    const emailList = subscribers.map((s) => s.email).join(', ');
+    navigator.clipboard.writeText(emailList);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
       <Navbar />
@@ -55,11 +83,11 @@ const AdminDashboard = () => {
                 <h1 className="text-xl font-bold text-slate-900">Store Admin Portal</h1>
                 <span className="bg-rose-100 text-rose-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">LIVE</span>
               </div>
-              <p className="text-xs text-slate-500">Managing Saree Vault Orders, Stock & Products</p>
+              <p className="text-xs text-slate-500">Managing Saree Vault Orders, Stock, Products & Customer Leads</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setActiveTab('orders')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
@@ -67,6 +95,15 @@ const AdminDashboard = () => {
               }`}
             >
               Customer Orders ({orders.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('newsletter')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'newsletter' ? 'bg-amber-800 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <Mail className="w-3.5 h-3.5" />
+              <span>Newsletter Leads ({subscribers.length})</span>
             </button>
             <button
               onClick={() => setActiveTab('inventory')}
@@ -79,8 +116,8 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* 3 Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* 4 Metric Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center"><DollarSign className="w-6 h-6" /></div>
             <div>
@@ -102,9 +139,16 @@ const AdminDashboard = () => {
               <div className="text-2xl font-black text-slate-900">{shippedOrders} Orders</div>
             </div>
           </div>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center"><Mail className="w-6 h-6" /></div>
+            <div>
+              <span className="text-xs text-slate-500 font-medium">Subscribed Emails</span>
+              <div className="text-2xl font-black text-slate-900">{subscribers.length} Leads</div>
+            </div>
+          </div>
         </div>
 
-        {/* Orders Table */}
+        {/* Tab 1: Orders Table */}
         {activeTab === 'orders' && (
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
@@ -167,7 +211,78 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Future Bag #2 Tab */}
+        {/* Tab 2: Newsletter Leads Table (New!) */}
+        {activeTab === 'newsletter' && (
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-amber-700" />
+                  <span>Customer Newsletter Subscribers ({subscribers.length})</span>
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Customers who subscribed from the banner to receive new product launches, organizing tips & coupons.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyEmails}
+                  className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copied ? 'Copied to Clipboard!' : 'Copy All Emails'}</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="py-3 px-4">#</th>
+                    <th className="py-3 px-4">Customer Email</th>
+                    <th className="py-3 px-4">Subscribed Date</th>
+                    <th className="py-3 px-4">Form Source</th>
+                    <th className="py-3 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {subscribers.map((sub, index) => (
+                    <tr key={sub.id || index} className="hover:bg-slate-50 transition">
+                      <td className="py-3.5 px-4 font-mono text-slate-400">{index + 1}</td>
+                      <td className="py-3.5 px-4 font-bold text-slate-900">{sub.email}</td>
+                      <td className="py-3.5 px-4 text-slate-500">{new Date(sub.date).toLocaleDateString()}</td>
+                      <td className="py-3.5 px-4 text-slate-600">{sub.source || 'Footer Banner'}</td>
+                      <td className="py-3.5 px-4">
+                        <span className="bg-emerald-100 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                          ACTIVE SUBSCRIBER
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200/80 text-xs text-amber-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div>
+                <span className="font-bold block">💡 How Admin Uses This:</span>
+                <span className="text-slate-600 text-[11px]">
+                  When you launch <strong>Bag #2 (Travel Sleeve)</strong> or start a <strong>Diwali Sale</strong>, you can send promo emails directly to these customers!
+                </span>
+              </div>
+              <button
+                onClick={handleCopyEmails}
+                className="px-3.5 py-1.5 bg-amber-800 text-white rounded-xl font-bold text-xs shrink-0 cursor-pointer"
+              >
+                Copy {subscribers.length} Emails
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Future Bag #2 Tab */}
         {activeTab === 'inventory' && (
           <div className="bg-white rounded-3xl p-6 border-2 border-dashed border-amber-300 shadow-sm space-y-4">
             <div className="flex justify-between items-center">
