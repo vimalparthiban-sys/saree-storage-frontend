@@ -1,22 +1,26 @@
 export const products = [
   {
-    id: 'steel-frame-living-box',
-    title: 'Stainless Steel Frame Foldable Saree Living Box | Heavy-Duty Wardrobe Organizer',
-    shortTitle: 'Steel Frame Saree Storage Living Box',
+    id: 'saree-organiser',
+    brand: 'APPZYS® Smart Storage Solutions',
+    title: 'APPZYS® 60L Saree Organiser | Stainless Steel Frame Foldable Living Box (50 x 40 x 30 cm)',
+    shortTitle: 'APPZYS® 60L Saree Organiser',
     category: 'Wardrobe Organizers',
+    categorySlug: 'saree-organiser',
     rating: 4.9,
     reviewCount: 97,
     inStock: true,
     basePrice: 499,
     mrp: 799,
     discountPercent: 38,
+    specs: '50 x 40 x 30 cm (Length x Width x Height) • 60 Liters Capacity',
+    perfectFor: ['Sarees & Traditional Wear', 'Clothes & Accessories', 'Blankets & Seasonal Storage'],
     images: [
+      '/images/appzys-saree-organiser.jpg',
       'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=800&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=800&auto=format&fit=crop&q=80'
     ],
-    sizes: ['66 Liters (15–18 Sarees)', '100 Liters (25+ Sarees / Quilts)'],
+    sizes: ['60 Liters (50 x 40 x 30 cm - 15 to 18 Sarees)'],
     colors: [
       { name: 'Navy Blue Polka Dot', hex: '#1e3a8a' },
       { name: 'Royal Maroon Polka', hex: '#881337' },
@@ -29,15 +33,73 @@ export const products = [
       { qty: 4, label: '4', price: 1599, mrp: 2999, savings: 'Save ₹1,400', isBestSeller: true },
       { qty: 6, label: '6', price: 2299, mrp: 4499, savings: 'Save ₹2,200' }
     ],
-    description: `In many Indian homes, wardrobes often become overcrowded with expensive silk, Banarasi, and Kanjivaram sarees. Pulling out one saree causes the entire stack to wrinkle and collapse. 
-    Our Heavy-Duty Stainless Steel Frame Living Box is engineered specifically to solve this. Built with a solid internal 4mm stainless steel wire frame, it stands rigid like a wardrobe drawer and allows stacking up to 4 boxes. The transparent front window with dual zipper lets you slide out any saree without disturbing the rest of the pile!`,
+    description: `APPZYS® 60L Saree Organiser is engineered with a built-in heavy-duty stainless steel wire frame. Normal cloth bags sag and wrinkle your expensive silk sarees. This living box stands completely rigid, supports stacking up to 4 boxes, and has a front clear zipper window to pull any saree out effortlessly without unstacking!`,
     keyFeatures: [
-      'Built-in 4mm Stainless Steel Rod Frame — Won’t sag or crush sarees',
-      'Dual Opening: Wide 180° Top Zipper + Transparent Front Slide-Out Flap',
-      'Heavy-Duty 600D Oxford Fabric — Water-repellent and moth-proof',
-      'Reinforced Webbing Side Carry Handles for easy lifting',
-      'Collapses completely flat to 1-inch thickness when not in use'
+      '60 L Large Capacity (50 x 40 x 30 cm) — Holds 15 to 18 Sarees or Quilts',
+      'Built-in 4mm Stainless Steel Wire Frame — Rigid & stackable',
+      'Transparent Front Window — Spot colors and borders instantly',
+      'Dual Smooth Zippers — Wide 180° Top Packing + Front Slide-Out',
+      'Foldable & Space Saving — Collapses flat to 1-inch when empty'
     ],
+    demo: {
+      badge: '3-SECOND EASY POP-UP SETUP',
+      headline: 'How The Saree Organiser Living Box Works',
+      subtitle: 'Push built-in steel rods and your rigid wardrobe shelf is ready in 3 seconds!',
+      steps: [
+        {
+          step: 1,
+          title: 'Unfold & Push Steel Wire Rods',
+          subtitle: 'Takes 3 seconds — no tools required',
+          desc: 'Open the top zipper and push the two internal stainless steel rods towards the side corners. They lock firmly into place.',
+          badge: 'Zero Assembly Tools',
+          icon: '🛠️ ➡️ 📦'
+        },
+        {
+          step: 2,
+          title: 'Pack from 180° Top Zipper',
+          subtitle: 'Load up to 15 to 18 silk or cotton sarees',
+          desc: 'The box stands completely free and rigid. Neatly stack heavy Kanjivaram, Banarasi, or daily clothes inside.',
+          badge: 'Rigid Free-Standing',
+          icon: '⬆️ 🥻 🥻 🥻'
+        },
+        {
+          step: 3,
+          title: 'Stack & Pull from Front Window',
+          subtitle: 'Slide any saree out without disturbing stack',
+          desc: 'Stack up to 4 boxes in your cupboard. Unzip the front transparent flap and pull out the exact saree you want!',
+          badge: 'Stackable Up To 4 Boxes',
+          icon: '🪟 🚪 ⬇️ 🥻'
+        }
+      ]
+    },
+    comparison: {
+      headline: 'Why Steel Frame Wins vs Flimsy Cloth Bags',
+      subtitle: 'See the difference between cheap roadside cloth covers and our engineered Steel Living Box.',
+      colWinner: '👑 APPZYS® Steel Frame Saree Organiser',
+      colLoser: 'Ordinary Cloth / Non-Woven Bag',
+      rows: [
+        {
+          feature: 'Structural Support',
+          winner: '4mm Solid Stainless Steel Wire Rods (Rigid 3D frame)',
+          loser: 'Flimsy cloth sags, collapses, and wrinkles sarees'
+        },
+        {
+          feature: 'Wardrobe Stackability',
+          winner: 'Stack 3 to 4 boxes vertically without touching inner sarees',
+          loser: 'Cannot stack — bottom sarees get crushed and damaged'
+        },
+        {
+          feature: 'Mid-Stack Retrieval',
+          winner: 'Front Transparent Zipper — slide any saree out in 2 seconds',
+          loser: 'Must unstack and open entire bag from top, making a mess'
+        },
+        {
+          feature: 'Fabric & Durability',
+          winner: 'Heavy-Duty 600D Oxford Fabric (Moisture & Moth Resistant)',
+          loser: 'Cheap 70 GSM paper cloth tears in 3-6 months'
+        }
+      ]
+    },
     reviews: [
       {
         name: 'Dr. Meenakshi Sundaram',
@@ -56,64 +118,117 @@ export const products = [
         title: 'Very sturdy steel frame, not like cheap cloth covers.',
         comment: 'The steel rods are thick and rigid. I stacked 3 boxes on top of each other inside my almirah. Doubled my wardrobe space. Highly recommended!',
         verified: true
-      },
-      {
-        name: 'Sunita Reddy',
-        city: 'Hyderabad, Telangana',
-        rating: 5,
-        date: '2 weeks ago',
-        title: 'Polka dot fabric looks so neat and premium!',
-        comment: 'The Oxford fabric is thick and waterproof. No moisture smell inside and the zippers glide effortlessly. Buying 2 more for my mother-in-law.',
-        verified: true
       }
     ]
   },
   {
-    id: 'travel-saree-sleeve-blouse-pocket',
-    title: 'Modular Travel Saree Cover Sleeve with Dedicated Blouse & Pin Pocket',
-    shortTitle: 'Travel Saree Sleeve with Blouse Pocket',
-    category: 'Travel & Single Covers',
-    rating: 4.8,
+    id: 'jewellery-organiser',
+    brand: 'APPZYS® Smart Storage Solutions',
+    title: 'APPZYS® Luxury Portable Travel Jewellery Organiser | Dust & Scratch Proof Compartments',
+    shortTitle: 'APPZYS® Jewellery Organiser',
+    category: 'Wardrobe Organizers',
+    categorySlug: 'jewel-organiser',
+    rating: 4.9,
     reviewCount: 64,
     inStock: true,
-    basePrice: 399,
-    mrp: 649,
-    discountPercent: 38,
+    basePrice: 349,
+    mrp: 599,
+    discountPercent: 42,
+    specs: 'Compact Portable Case • Multi-Tier Compartments with Lock Clasp',
+    perfectFor: ['Earrings & Rings', 'Necklaces & Chains', 'Bangles & Bracelets', 'Personal Use & Gifting'],
     images: [
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1595341888016-a392ef81b7de?w=800&auto=format&fit=crop&q=80'
+      '/images/appzys-jewellery-organiser.jpg',
+      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80'
     ],
-    sizes: ['Standard (Single Saree + Blouse)', 'Deep Gusset (Heavy Bridal / Lehenga)'],
+    sizes: ['Compact Travel Size (Fits inside Handbags & Wardrobe Shelves)'],
     colors: [
-      { name: 'Blush Pink Quilted', hex: '#f43f5e' },
-      { name: 'Sage Green', hex: '#15803d' },
-      { name: 'Royal Ivory Gold', hex: '#d97706' },
-      { name: 'Midnight Navy', hex: '#1e3a8a' }
+      { name: 'Ivory Cream Faux Leather', hex: '#fdfbf7' },
+      { name: 'Blush Powder Pink', hex: '#f43f5e' },
+      { name: 'Royal Navy Blue', hex: '#1e3a8a' },
+      { name: 'Emerald Velvet Green', hex: '#065f46' }
     ],
     packs: [
-      { qty: 1, label: '1', price: 399, mrp: 649, savings: 'Save ₹250' },
-      { qty: 3, label: '3', price: 999, mrp: 1899, savings: 'Save ₹900', isBestSeller: true },
-      { qty: 6, label: '6', price: 1799, mrp: 3599, savings: 'Save ₹1,800' },
-      { qty: 12, label: '12', price: 3299, mrp: 6999, savings: 'Save ₹3,700' }
+      { qty: 1, label: '1', price: 349, mrp: 599, savings: 'Save ₹250' },
+      { qty: 2, label: '2', price: 649, mrp: 1199, savings: 'Save ₹550' },
+      { qty: 4, label: '4', price: 1199, mrp: 2399, savings: 'Save ₹1,200', isBestSeller: true },
+      { qty: 6, label: '6', price: 1699, mrp: 3599, savings: 'Save ₹1,900' }
     ],
-    description: `Designed for destination weddings, travel, and organizing matching outfits. How many times have you searched through your cupboard for the blouse matching a specific saree? 
-    This sleeve features an independent zippered rear pouch specifically for your tailored blouse, safety pins, petticoat, and matching accessories, while the front transparent pane showcases the full saree.`,
+    description: `APPZYS® Luxury Travel Jewellery Organiser is crafted with premium anti-scratch PU leather and lined with ultra-soft beaded velvet. Features dedicated tangle-free necklace hooks with an elastic drop pocket, a stud earring flap, soft ring rolls, and removable grid dividers for bangles, bracelets, and watches. Keeps your precious gold, silver, and stones tangle-free and shining!`,
     keyFeatures: [
-      'Rear Zipper Pocket for Matching Blouse, Fall, and Safety Pins',
-      'Breathable Quilted Cotton lining prevents Zari silver tarnishing',
-      'Clear scratch-resistant front window for instant identification',
-      'Compact & lightweight — slides straight into suitcases for wedding travel',
-      'Heavy-duty metallic brass pull zippers'
+      'Dedicated Necklace Hooks & Elastic Pocket — Zero chain tangling',
+      'Middle Stud Earring Flap — Holds 10+ pairs neatly visible',
+      'Soft Beaded Velvet Lining — Protects gold & stones from scratches',
+      'Removable Cross-Dividers — Fits chunky bangles, kadas, and watches',
+      'Sturdy Metallic Snap Closure — Safe for travel in handbag or luggage'
     ],
+    demo: {
+      badge: 'SMART 3-TIER JEWELLERY LAYOUT',
+      headline: 'How The Jewellery Organiser Protects Your Ornaments',
+      subtitle: 'Everything has its own velvet compartment — zero scratches, zero tangles!',
+      steps: [
+        {
+          step: 1,
+          title: 'Top Lid: 5 Tangle-Free Necklace Hooks',
+          subtitle: 'Never struggle with knotted gold chains again',
+          desc: 'Hang chains and pendant necklaces securely on individual hooks. Tuck the bottom pendants into the elastic pocket so they never swing or scratch.',
+          badge: 'Tangle-Free Chains',
+          icon: '📿 ⬆️ ✨'
+        },
+        {
+          step: 2,
+          title: 'Middle Flap: Stud Earrings & Ring Rolls',
+          subtitle: '6 soft ring grooves + 10 earring holes',
+          desc: 'Press stud earrings and jhumka pairs through dedicated flap holes. Slide rings, nose pins, and cocktail rings into the cushioned velvet rolls.',
+          badge: 'Anti-Scratch Velvet',
+          icon: '💍 👂 🌸'
+        },
+        {
+          step: 3,
+          title: 'Bottom Base: Bangles & Bracelet Dividers',
+          subtitle: 'Customizable grid with removable dividers',
+          desc: 'Remove cross-dividers to place heavy bridal bangles, watches, or brooches. Snap close the metallic clasp and slide into your handbag!',
+          badge: 'Travel Compact Lock',
+          icon: '💎 👝 🔒'
+        }
+      ]
+    },
+    comparison: {
+      headline: 'Why APPZYS® Jewel Box Wins vs Plastic Pouches',
+      subtitle: 'Why storing precious jewellery in plastic boxes or zip covers damages your stones and tarnishes gold.',
+      colWinner: '👑 APPZYS® Velvet Jewellery Box',
+      colLoser: 'Loose Plastic Boxes / Pouches',
+      rows: [
+        {
+          feature: 'Chain Protection',
+          winner: '5 Dedicated hooks + drop pocket (100% Tangle-Free)',
+          loser: 'Chains get knotted into frustrating knots that can snap'
+        },
+        {
+          feature: 'Surface Scratch Guard',
+          winner: 'Ultra-soft beaded velvet lining shields pearls & stones',
+          loser: 'Hard plastic walls scratch polished gold & Kundan work'
+        },
+        {
+          feature: 'Travel Portability',
+          winner: 'Compact zip/snap case slides effortlessly into handbags',
+          loser: 'Bulky, loose boxes spill open inside luggage'
+        },
+        {
+          feature: 'Gifting & Aesthetic',
+          winner: 'Luxurious faux leather finish — ideal bridal/festive gift',
+          loser: 'Cheap transparent plastic looks untidy on dressing tables'
+        }
+      ]
+    },
     reviews: [
       {
         name: 'Ananya Sharma',
         city: 'Bangalore, Karnataka',
         rating: 5,
         date: '3 days ago',
-        title: 'Blouse pocket is pure genius!',
-        comment: 'I packed 4 sarees for my cousin wedding in Jaipur. Having the matching designer blouse zipped with each saree saved me so much panic while getting ready!',
+        title: 'Finally my necklaces are not tangled!',
+        comment: 'I bought this for my sister wedding travel. The necklace hooks and ring slots are so well designed. Beautiful cream faux leather finish!',
         verified: true
       },
       {
@@ -121,8 +236,8 @@ export const products = [
         city: 'Mumbai, Maharashtra',
         rating: 5,
         date: '1 week ago',
-        title: 'Soft cotton quilt protects delicate zari.',
-        comment: 'Much better than plastic covers which damage pure Kanjivaram zari. Very premium stitching.',
+        title: 'Perfect gift for bridesmaids!',
+        comment: 'Ordered Pack of 4 for my bridesmaids. Everyone loved the quality and velvet interior. Keeps earrings and rings so organized.',
         verified: true
       }
     ]

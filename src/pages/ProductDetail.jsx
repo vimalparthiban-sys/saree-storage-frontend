@@ -9,6 +9,7 @@ import CartDrawer from '../components/CartDrawer';
 import CheckoutModal from '../components/CheckoutModal';
 import AuthModal from '../components/AuthModal';
 import SizeGuideModal from '../components/SizeGuideModal';
+import ProductDemoSection from '../components/ProductDemoSection';
 import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, Minus, Plus, Heart, Share2, Sparkles, Box } from 'lucide-react';
 
 const ProductDetail = () => {
@@ -312,6 +313,9 @@ const ProductDetail = () => {
             </ul>
           </div>
         </div>
+
+        {/* Dynamic 3-Step Demo & Comparison for this specific product */}
+        <ProductDemoSection product={product} />
 
         {/* Customer Reviews Section (Specific to this Product) */}
         <div id="reviews-section" className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-6">
