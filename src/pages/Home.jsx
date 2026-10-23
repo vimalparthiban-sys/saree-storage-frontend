@@ -15,15 +15,17 @@ import { Search, Star, ArrowRight } from 'lucide-react';
 const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeCategory = searchParams.get('category');
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchQuery = searchParams.get('search') || '';
   const [inStockOnly, setInStockOnly] = useState(true);
   const [sortBy, setSortBy] = useState('featured');
 
   // Filter products
   let filteredProducts = products.filter((p) => {
     const matchesCategory = !activeCategory || p.categorySlug === activeCategory;
-    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = !searchQuery || 
+                          p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.shortTitle.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStock = !inStockOnly || p.inStock;
     return matchesCategory && matchesSearch && matchesStock;
   });
@@ -42,29 +44,50 @@ const Home = () => {
       <AnnouncementBar />
       <Navbar />
 
-      {/* 1. Responsive Search Bar */}
-      <div className="bg-white border-b border-slate-200 py-3 sm:py-5 px-3 sm:px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="relative">
-            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 absolute left-3.5 sm:left-4 top-3 sm:top-3.5" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="What are you searching for? (e.g. Saree Organiser, Jewellery Box)"
-              className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-amber-700 focus:outline-hidden text-xs sm:text-sm shadow-2xs"
+      {/* 1. Hero Banner: Rounded Rectangle aligned with APPZYS Logo grid (equal gap on 4 sides) */}
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-1 w-full">
+        <div className="relative group overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md">
+          <img
+            src="/images/appzys-hero-banner.jpg"
+            alt="APPZYS Smart Storage Solutions - Saree & Jewellery Organisers"
+            className="w-full h-auto object-cover block select-none"
+            loading="eager"
+            fetchPriority="high"
+          />
+
+          {/* Interactive Clickable Hotspots mapped directly to the buttons & products in the banner */}
+          <div className="absolute inset-0 pointer-events-none">
+            {/* 1. "Shop Saree Organiser" CTA Button */}
+            <Link
+              to="/?category=saree-organiser"
+              className="pointer-events-auto absolute left-[3.5%] top-[48%] w-[14.5%] h-[8%] rounded-full cursor-pointer hover:opacity-80 transition"
+              title="Shop Saree Organiser (60L)"
+              aria-label="Shop Saree Organiser"
             />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-2.5 sm:top-3 text-xs text-slate-400 hover:text-slate-700 cursor-pointer"
-              >
-                Clear
-              </button>
-            )}
+            {/* 2. "Shop Jewellery Organiser" CTA Button */}
+            <Link
+              to="/?category=jewel-organiser"
+              className="pointer-events-auto absolute left-[18.5%] top-[48%] w-[15.5%] h-[8%] rounded-full cursor-pointer hover:opacity-80 transition"
+              title="Shop Jewellery Organiser (Velvet)"
+              aria-label="Shop Jewellery Organiser"
+            />
+            {/* 3. Saree Organiser Box */}
+            <Link
+              to="/?category=saree-organiser"
+              className="pointer-events-auto absolute left-[34%] top-[30%] w-[33%] h-[48%] cursor-pointer"
+              title="Shop Saree Organiser"
+              aria-label="Saree Organiser Box"
+            />
+            {/* 4. Jewellery Organiser Box */}
+            <Link
+              to="/?category=jewel-organiser"
+              className="pointer-events-auto absolute left-[67%] top-[25%] w-[31%] h-[53%] cursor-pointer"
+              title="Shop Jewellery Organiser"
+              aria-label="Jewellery Organiser Box"
+            />
           </div>
         </div>
-      </div>
+      </section>
 
       <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 w-full space-y-8 sm:space-y-12">
         
@@ -83,6 +106,36 @@ const Home = () => {
                 <span className="text-[10px] sm:text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">
                   {filteredProducts.length} Products
                 </span>
+                {searchQuery && (
+                  <span className="text-[10px] sm:text-xs bg-slate-200 text-slate-800 font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    Matching "{searchQuery}"
+                    <button
+                      onClick={() => {
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.delete('search');
+                        setSearchParams(newParams);
+                      }}
+                      className="text-slate-500 hover:text-slate-900 font-bold cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                {activeCategory && (
+                  <span className="text-[10px] sm:text-xs bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    Filtered
+                    <button
+                      onClick={() => {
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.delete('category');
+                        setSearchParams(newParams);
+                      }}
+                      className="text-blue-700 hover:text-blue-900 font-bold cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
               </div>
               <p className="text-[11px] sm:text-xs text-slate-500 mt-1">
                 APPZYS® Smart Storage Solutions • High Durability & Space Saving
@@ -117,113 +170,48 @@ const Home = () => {
               </div>
             </div>
           </div>
-
-          {/* Category Switch Tabs (Horizontally swipeable with thumb on mobile) */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs whitespace-nowrap scrollbar-none">
-            <span className="text-slate-400 font-medium shrink-0">Filter:</span>
-            
-            <button
-              onClick={() => setSearchParams({})}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border cursor-pointer font-bold transition shrink-0 ${
-                !activeCategory
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-              }`}
-            >
-              All Products ({products.length})
-            </button>
-
-            <button
-              onClick={() => setSearchParams({ category: 'saree-organiser' })}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border cursor-pointer font-bold transition flex items-center gap-1.5 shrink-0 ${
-                activeCategory === 'saree-organiser'
-                  ? 'bg-amber-800 text-white border-amber-800 shadow-xs'
-                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-              }`}
-            >
-              <span>🥻 Saree Organiser</span>
-              <span className="text-[9px] sm:text-[10px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-extrabold">60L</span>
-            </button>
-
-            <button
-              onClick={() => setSearchParams({ category: 'jewel-organiser' })}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border cursor-pointer font-bold transition flex items-center gap-1.5 shrink-0 ${
-                activeCategory === 'jewel-organiser'
-                  ? 'bg-rose-800 text-white border-rose-800 shadow-xs'
-                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-              }`}
-            >
-              <span>💍 Jewellery Organiser</span>
-              <span className="text-[9px] sm:text-[10px] bg-rose-100 text-rose-900 px-1.5 py-0.2 rounded font-extrabold">Velvet</span>
-            </button>
-          </div>
         </div>
 
-        {/* 3. Responsive Product Catalog Grid */}
-        <div className={`grid grid-cols-1 ${filteredProducts.length === 1 ? 'max-w-xl mx-auto' : 'sm:grid-cols-2 max-w-4xl mx-auto'} gap-4 sm:gap-8`}>
+        {/* 3. Responsive Product Catalog Grid (Minimalist & Modern, matching Reference 2) */}
+        <div className={`grid grid-cols-1 ${filteredProducts.length === 1 ? 'max-w-xl mx-auto' : 'sm:grid-cols-2 max-w-4xl mx-auto'} gap-5 sm:gap-8`}>
           {filteredProducts.map((p) => (
-            <div
+            <Link
               key={p.id}
-              className="group bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              to={`/product/${p.id}`}
+              className="group bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer"
             >
-              {/* Clickable Image Area */}
-              <Link to={`/product/${p.id}`} className="block space-y-3 sm:space-y-4">
-                <div className="relative aspect-4/3 rounded-xl sm:rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center p-2 sm:p-3 border border-slate-100">
-                  <img
-                    src={p.images[0]}
-                    alt={p.title}
-                    className="w-full h-full object-contain rounded-lg sm:rounded-xl group-hover:scale-105 transition-all duration-300"
-                    loading="lazy"
-                  />
-                  <span className="absolute top-2.5 left-2.5 bg-rose-600 text-white font-bold text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full uppercase tracking-wider shadow-xs">
-                    -{p.discountPercent}% OFF
-                  </span>
-                  <span className="absolute bottom-2.5 right-2.5 bg-white/95 backdrop-blur-xs text-slate-800 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-md shadow-2xs">
-                    {p.packs.length} Pack Sizes
-                  </span>
+              {/* Full-width Product Image Container */}
+              <div className="relative aspect-4/3 sm:aspect-square w-full bg-white flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+                <img
+                  src={p.images[0]}
+                  alt={p.title}
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+                
+                {/* Rating Badge (Top Right, matching Reference 2) */}
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-1 text-xs font-bold text-slate-800 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-2xs">
+                  <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                  <span>{p.rating}</span>
                 </div>
-
-                {/* Title & Brand */}
-                <div className="space-y-1">
-                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-2 py-0.5 rounded">
-                    {p.brand}
-                  </span>
-                  <h3 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-amber-800 transition line-clamp-2">
-                    {p.title}
-                  </h3>
-                  
-                  {/* Rating Stars */}
-                  <div className="flex items-center gap-1.5 text-xs text-amber-500">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <span className="text-slate-500 text-[10px] sm:text-[11px] font-medium">({p.reviewCount} Reviews)</span>
-                  </div>
-                </div>
-
-                {/* Specs */}
-                <p className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1">{p.specs}</p>
-
-                {/* Price */}
-                <div className="flex items-baseline gap-2 pt-1 border-t border-slate-100">
-                  <span className="text-lg sm:text-xl font-black text-slate-900">Rs. {p.basePrice}.00</span>
-                  <span className="text-xs text-slate-400 line-through">Rs. {p.mrp}.00</span>
-                </div>
-              </Link>
-
-              {/* Choose Option CTA Button */}
-              <div className="pt-3 sm:pt-4">
-                <Link
-                  to={`/product/${p.id}`}
-                  className="w-full py-2.5 sm:py-3 rounded-xl bg-slate-900 group-hover:bg-amber-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-xs cursor-pointer active:scale-98"
-                >
-                  <span>Choose Option / View Details</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
-            </div>
+
+              {/* Bottom Info Section (Clean & Symmetrical: Category + Title & Rate) */}
+              <div className="bg-slate-50/70 p-4 sm:p-5 border-t border-slate-100 flex flex-col justify-between">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                  {p.brand}
+                </span>
+
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#1c2d4a] transition line-clamp-2">
+                    {p.cardTitle || p.title}
+                  </h3>
+                  <span className="text-xs sm:text-sm font-bold text-slate-900 shrink-0 text-right whitespace-nowrap">
+                    From ₹ {p.basePrice}.00
+                  </span>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
 

@@ -53,7 +53,7 @@ const NewsletterBanner = () => {
           <span>JOIN 12,000+ WARDROBE ENTHUSIASTS</span>
         </div>
 
-        {/* Title & Subtitle matching the screenshot */}
+        {/* Title & Subtitle matching original aesthetic */}
         <div className="space-y-2">
           <h2 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-amber-50">
             Keep Useful Things Coming
@@ -82,7 +82,7 @@ const NewsletterBanner = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#c5a880] hover:bg-[#b8986d] text-stone-950 font-bold text-xs sm:text-sm transition duration-200 cursor-pointer shadow-md disabled:opacity-50 shrink-0"
+                className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#1c2d4a] hover:bg-[#15233a] text-white font-bold text-xs sm:text-sm transition duration-200 cursor-pointer shadow-md disabled:opacity-50 shrink-0 border border-white/20"
               >
                 {loading ? 'Subscribing...' : 'Subscribe Now'}
               </button>

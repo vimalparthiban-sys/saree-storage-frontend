@@ -137,7 +137,7 @@ const ProductDetail = () => {
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
                 <span className="font-bold text-slate-800">
-                  Pack of: <strong className="text-amber-800">{currentPack.qty} Pieces</strong>
+                  Pack of: <strong className="text-[#1c2d4a]">{currentPack.qty} Pieces</strong>
                 </span>
                 <span className="text-emerald-700 font-semibold">{currentPack.savings}</span>
               </div>
@@ -148,13 +148,13 @@ const ProductDetail = () => {
                     onClick={() => setSelectedPackIndex(idx)}
                     className={`py-2 sm:py-2.5 rounded-xl text-xs font-extrabold border-2 transition cursor-pointer text-center ${
                       selectedPackIndex === idx
-                        ? 'border-amber-800 bg-amber-50 text-amber-900 shadow-xs ring-1 ring-amber-800'
+                        ? 'border-[#1c2d4a] bg-blue-50/50 text-[#1c2d4a] shadow-xs ring-1 ring-[#1c2d4a]'
                         : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                     }`}
                   >
                     <span>{p.label}</span>
                     {p.isBestSeller && (
-                      <span className="block text-[8px] sm:text-[9px] text-amber-700 font-bold -mt-0.5">BEST</span>
+                      <span className="block text-[8px] sm:text-[9px] text-[#1c2d4a] font-bold -mt-0.5">BEST</span>
                     )}
                   </button>
                 ))}
@@ -169,7 +169,7 @@ const ProductDetail = () => {
                   <button
                     type="button"
                     onClick={() => setIsSizeGuideOpen(true)}
-                    className="text-amber-800 hover:underline font-semibold cursor-pointer"
+                    className="text-[#1c2d4a] hover:underline font-semibold cursor-pointer"
                   >
                     📏 Size Guide
                   </button>
@@ -182,7 +182,7 @@ const ProductDetail = () => {
                     onClick={() => setSelectedSize(s)}
                     className={`w-full p-2.5 rounded-xl border text-xs font-semibold text-left transition cursor-pointer ${
                       selectedSize === s
-                        ? 'border-amber-800 bg-amber-50 text-amber-900 font-bold'
+                        ? 'border-[#1c2d4a] bg-blue-50/50 text-[#1c2d4a] font-bold'
                         : 'border-slate-200 hover:border-slate-300 text-slate-700'
                     }`}
                   >
@@ -204,7 +204,7 @@ const ProductDetail = () => {
                     onClick={() => setSelectedColor(c.name)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs transition cursor-pointer ${
                       selectedColor === c.name
-                        ? 'border-amber-800 bg-amber-50 text-amber-900 font-bold'
+                        ? 'border-[#1c2d4a] bg-blue-50/50 text-[#1c2d4a] font-bold'
                         : 'border-slate-200 hover:border-slate-300 text-slate-600'
                     }`}
                   >
@@ -236,8 +236,8 @@ const ProductDetail = () => {
             </div>
 
             {/* Delivery Estimation Strip */}
-            <div className="bg-amber-50/70 text-amber-950 p-3 rounded-xl border border-amber-200 text-xs flex items-center gap-2 font-medium">
-              <Truck className="w-4 h-4 text-amber-700 shrink-0" />
+            <div className="bg-blue-50/70 text-[#1c2d4a] p-3 rounded-xl border border-blue-100 text-xs flex items-center gap-2 font-medium">
+              <Truck className="w-4 h-4 text-[#1c2d4a] shrink-0" />
               <span>Estimated delivery between <strong>October 26 and October 28</strong></span>
             </div>
 
@@ -245,14 +245,14 @@ const ProductDetail = () => {
             <div className="space-y-2.5 pt-2">
               <button
                 onClick={handleAddToCart}
-                className="w-full py-3 sm:py-3.5 rounded-xl border-2 border-slate-900 hover:bg-slate-900 hover:text-white text-slate-900 font-bold text-xs sm:text-sm transition cursor-pointer shadow-xs active:scale-98"
+                className="w-full py-3 sm:py-3.5 rounded-xl border-2 border-[#1c2d4a] hover:bg-[#1c2d4a] hover:text-white text-[#1c2d4a] font-bold text-xs sm:text-sm transition cursor-pointer shadow-xs active:scale-98"
               >
                 Add to cart
               </button>
 
               <button
                 onClick={handleBuyNow}
-                className="w-full py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-amber-700 to-rose-700 hover:from-amber-800 hover:to-rose-800 text-white font-bold text-xs sm:text-sm transition cursor-pointer shadow-md shadow-amber-900/20 active:scale-98"
+                className="w-full py-3 sm:py-3.5 rounded-xl bg-[#1c2d4a] hover:bg-[#15233a] text-white font-bold text-xs sm:text-sm transition cursor-pointer shadow-md shadow-[#1c2d4a]/20 active:scale-98"
               >
                 Buy it now
               </button>

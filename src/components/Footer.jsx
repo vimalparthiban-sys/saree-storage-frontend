@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+    <footer className="bg-[#13223f] text-slate-300 pt-16 pb-12 border-t border-[#1c2d4a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* 3 Pillars of Trust */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-12 border-b border-slate-800">
-          <div className="flex items-center gap-4 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60">
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-12 border-b border-[#1c2d4a]">
+          <div className="flex items-center gap-4 bg-[#1c2d4a]/50 p-4 rounded-2xl border border-[#2a4066]/50">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
               <Truck className="w-6 h-6" />
             </div>
             <div>
@@ -19,8 +19,8 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-4 bg-[#1c2d4a]/50 p-4 rounded-2xl border border-[#2a4066]/50">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
@@ -29,8 +29,8 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60">
-            <div className="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-4 bg-[#1c2d4a]/50 p-4 rounded-2xl border border-[#2a4066]/50">
+            <div className="w-12 h-12 rounded-xl bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
               <RotateCcw className="w-6 h-6" />
             </div>
             <div>
@@ -44,39 +44,46 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4 md:col-span-2">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-amber-600 flex items-center justify-center text-white font-serif font-black">
-                S
+              <div className="w-9 h-9 rounded-xl bg-[#1c2d4a] flex items-center justify-center text-white font-serif font-black text-lg border border-[#2a4066]">
+                A
               </div>
-              <span className="font-serif font-bold text-xl text-white">Saree<span className="text-amber-500">Vault</span></span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-serif font-bold text-xl text-white">
+                  APPZYS<span className="text-[#60a5fa]">®</span>
+                </span>
+                <span className="text-[9px] bg-white/10 text-slate-200 font-bold px-1.5 py-0.5 rounded border border-white/15">
+                  SMART STORAGE
+                </span>
+              </div>
             </div>
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
-              India's premier wardrobe transformation brand. We engineer heavy-duty steel frame living boxes that protect your precious Kanjivaram, Banarasi, and festive sarees from wrinkles, dust, and moisture.
+              India's premier wardrobe transformation brand. We engineer heavy-duty steel frame living boxes and luxury jewellery organisers that protect your precious clothes and accessories.
             </p>
             <div className="text-xs text-slate-400 space-y-1">
-              <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-amber-500" /> WhatsApp Support: +91 98400 12345</p>
-              <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-amber-500" /> Support: care@sareevault.com</p>
+              <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#60a5fa]" /> WhatsApp Support: +91 98400 12345</p>
+              <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-[#60a5fa]" /> Support: care@appzys.com</p>
             </div>
           </div>
 
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">Quick Navigation</h4>
             <ul className="space-y-2 text-xs text-slate-400">
-              <li><a href="#demo" className="hover:text-amber-400 transition">3-Step Frame Setup</a></li>
-              <li><a href="#packs" className="hover:text-amber-400 transition">Pack of 2 & 4 Offers</a></li>
-              <li><a href="#comparison" className="hover:text-amber-400 transition">Steel vs Cloth Bag</a></li>
-              <li><a href="#reviews" className="hover:text-amber-400 transition">Customer Reviews</a></li>
-              <li><Link to="/my-orders" className="hover:text-amber-400 transition">Track My Order</Link></li>
+              <li><Link to="/?category=saree-organiser" className="hover:text-blue-400 transition">60L Saree Organiser</Link></li>
+              <li><Link to="/?category=jewel-organiser" className="hover:text-blue-400 transition">Jewellery Organiser</Link></li>
+              <li><Link to="/track-order" className="hover:text-blue-400 transition">Track Your Order</Link></li>
+              <li><Link to="/my-orders" className="hover:text-blue-400 transition">My Orders</Link></li>
+              <li><Link to="/contact" className="hover:text-blue-400 transition">Contact Us</Link></li>
             </ul>
           </div>
 
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Saree Care & Portal</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Quality Promise</h4>
             <ul className="space-y-2 text-xs text-slate-400">
-              <li>✓ Moisture-Proof 600D Oxford Care</li>
-              <li>✓ How to Fold Kanjivaram Zari</li>
-              <li>✓ Stack up to 4 boxes safely</li>
+              <li>✓ Heavy-Duty Steel Frame Technology</li>
+              <li>✓ Luxury Dust & Moisture-Proof Fabric</li>
+              <li>✓ 100% Cash on Delivery (COD) Across India</li>
               <li className="pt-2">
-                <Link to="/admin" className="text-amber-400 hover:underline font-semibold flex items-center gap-1">
+                <Link to="/admin" className="text-blue-400 hover:underline font-semibold flex items-center gap-1">
                   🔒 Admin Store Portal
                 </Link>
               </li>
@@ -84,10 +91,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-800 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 SareeStore / Saree Vault Technologies. All rights reserved.</p>
+        <div className="pt-8 border-t border-[#1c2d4a] text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p>© 2026 APPZYS® Smart Storage Solutions. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Made with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for Indian Wardrobes
+            Made with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for Indian Homes
           </p>
         </div>
 

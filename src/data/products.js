@@ -1,9 +1,10 @@
 export const products = [
   {
     id: 'saree-organiser',
-    brand: 'APPZYS® Smart Storage Solutions',
-    title: 'APPZYS® 60L Saree Organiser | Stainless Steel Frame Foldable Living Box (50 x 40 x 30 cm)',
-    shortTitle: 'APPZYS® 60L Saree Organiser',
+    brand: 'Wardrobe Organizers',
+    title: '60L Saree Organiser | Stainless Steel Frame Foldable Living Box (50 x 40 x 30 cm)',
+    cardTitle: '60L Saree Organiser | Stainless Steel Frame Foldable Living Box',
+    shortTitle: '60L Saree Organiser | Stainless Steel Frame Foldable Living Box',
     category: 'Wardrobe Organizers',
     categorySlug: 'saree-organiser',
     rating: 4.9,
@@ -15,10 +16,9 @@ export const products = [
     specs: '50 x 40 x 30 cm (Length x Width x Height) • 60 Liters Capacity',
     perfectFor: ['Sarees & Traditional Wear', 'Clothes & Accessories', 'Blankets & Seasonal Storage'],
     images: [
-      '/images/appzys-saree-organiser.jpg',
-      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=800&auto=format&fit=crop&q=80'
+      '/images/saree-organiser-1.jpg',
+      '/images/saree-organiser-2.jpg',
+      '/images/saree-organiser-3.jpg'
     ],
     sizes: ['60 Liters (50 x 40 x 30 cm - 15 to 18 Sarees)'],
     colors: [
@@ -123,12 +123,13 @@ export const products = [
   },
   {
     id: 'jewellery-organiser',
-    brand: 'APPZYS® Smart Storage Solutions',
-    title: 'APPZYS® Luxury Portable Travel Jewellery Organiser | Dust & Scratch Proof Compartments',
-    shortTitle: 'APPZYS® Jewellery Organiser',
+    brand: 'Wardrobe Organizers',
+    title: 'Luxury Portable Travel Jewellery Organiser | Dust & Scratch Proof Compartments',
+    cardTitle: 'Luxury Portable Travel Jewellery Organiser | Dust & Scratch Proof Compartments',
+    shortTitle: 'Luxury Portable Travel Jewellery Organiser | Dust & Scratch Proof Compartments',
     category: 'Wardrobe Organizers',
     categorySlug: 'jewel-organiser',
-    rating: 4.9,
+    rating: 4.8,
     reviewCount: 64,
     inStock: true,
     basePrice: 349,
