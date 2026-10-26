@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { products } from '../data/products';
 import AnnouncementBar from '../components/AnnouncementBar';
@@ -10,7 +10,98 @@ import CartDrawer from '../components/CartDrawer';
 import CheckoutModal from '../components/CheckoutModal';
 import AuthModal from '../components/AuthModal';
 import SizeGuideModal from '../components/SizeGuideModal';
-import { Search, Star, ArrowRight } from 'lucide-react';
+import { Search, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const ProductCardImage = ({ product }) => {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const images = product.images && product.images.length > 0 ? product.images : ['/placeholder.jpg'];
+  const hasMultiple = images.length > 1;
+
+  useEffect(() => {
+    if (!hasMultiple || !isHovered) return;
+    const interval = setInterval(() => {
+      setCurrentIdx((prev) => (prev + 1) % images.length);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [hasMultiple, isHovered, images.length]);
+
+  const handlePrev = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentIdx((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentIdx((prev) => (prev + 1) % images.length);
+  };
+
+  return (
+    <div
+      className="relative aspect-4/3 sm:aspect-square w-full p-3 sm:p-4.5 flex items-center justify-center select-none"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden relative flex items-center justify-center bg-slate-50/80 border border-slate-100">
+        <img
+          src={images[currentIdx]}
+          alt={product.title}
+          className={`w-full h-full object-contain rounded-2xl sm:rounded-3xl transition-transform duration-300 ${
+            !hasMultiple ? 'group-hover:scale-105' : 'scale-100'
+          }`}
+          loading="lazy"
+        />
+
+        {/* Rating Badge (Top Right) */}
+        <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 flex items-center gap-1 text-xs font-bold text-slate-800 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-2xs z-10 pointer-events-none">
+          <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+          <span>{product.rating}</span>
+        </div>
+
+        {/* Multi-Image Controls */}
+        {hasMultiple && (
+          <>
+            {/* Backward Button */}
+            <button
+              onClick={handlePrev}
+              type="button"
+              className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all opacity-90 sm:opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 z-20 cursor-pointer border border-slate-200/80"
+              aria-label="Previous image"
+              title="Previous image"
+            >
+              <ChevronLeft className="w-4 h-4 text-slate-800 stroke-[2.5]" />
+            </button>
+
+            {/* Forward Button */}
+            <button
+              onClick={handleNext}
+              type="button"
+              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all opacity-90 sm:opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 z-20 cursor-pointer border border-slate-200/80"
+              aria-label="Next image"
+              title="Next image"
+            >
+              <ChevronRight className="w-4 h-4 text-slate-800 stroke-[2.5]" />
+            </button>
+
+            {/* Subtle Dots Indicator */}
+            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10 bg-black/25 backdrop-blur-xs px-2 py-1 rounded-full pointer-events-none">
+              {images.map((_, dotIdx) => (
+                <span
+                  key={dotIdx}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    dotIdx === currentIdx ? 'w-4 bg-white' : 'w-1.5 bg-white/60'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -180,21 +271,8 @@ const Home = () => {
               to={`/product/${p.id}`}
               className="group bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer"
             >
-              {/* Full-width Product Image Container */}
-              <div className="relative aspect-4/3 sm:aspect-square w-full bg-white flex items-center justify-center p-4 sm:p-6 overflow-hidden">
-                <img
-                  src={p.images[0]}
-                  alt={p.title}
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                
-                {/* Rating Badge (Top Right, matching Reference 2) */}
-                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-1 text-xs font-bold text-slate-800 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-full shadow-2xs">
-                  <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                  <span>{p.rating}</span>
-                </div>
-              </div>
+              {/* Product Image Container with multi-image hover & arrow controls */}
+              <ProductCardImage product={p} />
 
               {/* Bottom Info Section (Clean & Symmetrical: Category + Title & Rate) */}
               <div className="bg-slate-50/70 p-4 sm:p-5 border-t border-slate-100 flex flex-col justify-between">

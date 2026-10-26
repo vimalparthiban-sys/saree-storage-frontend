@@ -76,15 +76,15 @@ const TrackOrder = () => {
   const isDelivered = status === 'DELIVERED';
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-amber-100 selection:text-amber-900">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full space-y-8">
-        {/* Top Tracking Card (Warm Luxury Amber Theme) */}
+        {/* Top Tracking Card (Web Brand Navy & Blue Theme) */}
         <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm text-center space-y-6">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold border border-amber-300">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>EXPRESS LOGISTICS • DELHI VERY & BLUEDART API</span>
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 text-[#1c2d4a] text-xs font-bold border border-blue-200">
+            <Sparkles className="w-3.5 h-3.5 text-blue-700" />
+            <span>EXPRESS LOGISTICS • DELHIVERY & BLUEDART API</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-serif font-bold text-slate-900">
@@ -102,12 +102,12 @@ const TrackOrder = () => {
                 value={orderQuery}
                 onChange={(e) => setOrderQuery(e.target.value)}
                 placeholder="Enter AWB Code (e.g. AWB-DEL-982140) or Order ID"
-                className="w-full px-5 py-3.5 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-amber-700 focus:outline-hidden bg-slate-50 focus:bg-white transition"
+                className="w-full px-5 py-3.5 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-[#1c2d4a] focus:outline-hidden bg-slate-50 focus:bg-white transition"
               />
             </div>
             <button
               type="submit"
-              className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-700 to-rose-700 hover:from-amber-800 hover:to-rose-800 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-900/20 transition cursor-pointer shrink-0"
+              className="px-8 py-3.5 rounded-2xl bg-[#1c2d4a] hover:bg-[#15233b] text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-900/15 transition cursor-pointer shrink-0"
             >
               Track Now
             </button>
@@ -124,7 +124,7 @@ const TrackOrder = () => {
                   setOrderQuery(o.awb || o.id);
                   doTrack(o.awb || o.id);
                 }}
-                className="font-mono font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-200 transition cursor-pointer"
+                className="font-mono font-bold text-blue-900 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg border border-blue-200 transition cursor-pointer"
               >
                 {o.awb || o.id} ({o.customerName})
               </button>
@@ -150,7 +150,7 @@ const TrackOrder = () => {
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs text-slate-600 font-medium">Courier Partner:</span>
                         <span className="font-bold text-xs text-slate-900 flex items-center gap-1">
-                          <Truck className="w-3.5 h-3.5 text-amber-700" />
+                          <Truck className="w-3.5 h-3.5 text-blue-700" />
                           {trackedOrder.courier || 'Delhivery Express'}
                         </span>
                         <span className="font-mono text-xs font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-700">
@@ -158,7 +158,7 @@ const TrackOrder = () => {
                         </span>
                         <button
                           onClick={() => handleCopyAwb(trackedOrder.awb || trackedOrder.id)}
-                          className="text-amber-800 hover:text-amber-900 text-[10px] font-bold cursor-pointer"
+                          className="text-blue-700 hover:text-blue-900 text-[10px] font-bold cursor-pointer"
                         >
                           {copiedAwb ? 'Copied!' : 'Copy'}
                         </button>
@@ -174,7 +174,7 @@ const TrackOrder = () => {
                             ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                             : isShipped
                             ? 'bg-blue-50 text-blue-800 border-blue-300'
-                            : 'bg-amber-50 text-amber-800 border-amber-300'
+                            : 'bg-blue-50 text-blue-800 border-blue-200'
                         }`}
                       >
                         {isDelayed
@@ -205,7 +205,7 @@ const TrackOrder = () => {
                       {/* Active Colored Line */}
                       <div
                         className={`absolute top-8 left-6 h-1 -translate-y-1/2 z-0 transition-all duration-500 ${
-                          isDelayed ? 'bg-rose-500' : 'bg-gradient-to-r from-emerald-600 via-amber-500 to-emerald-600'
+                          isDelayed ? 'bg-rose-500' : 'bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600'
                         }`}
                         style={{
                           width: isDelivered
@@ -383,11 +383,11 @@ const TrackOrder = () => {
           )}
         </div>
 
-        {/* 2 Information Cards (Warm Amber / Stone Luxury Palette) */}
+        {/* 2 Information Cards (Web Brand Navy & Blue Theme) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Card 1: Verify Your AWB */}
           <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-700 to-rose-700 text-white flex items-center justify-center shadow-md shadow-amber-900/15">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#1c2d4a] to-blue-700 text-white flex items-center justify-center shadow-md shadow-blue-900/15">
               <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
             </div>
 
@@ -400,15 +400,15 @@ const TrackOrder = () => {
 
             <ul className="text-xs space-y-2.5 text-slate-700 pt-2">
               <li className="flex items-start gap-2">
-                <span className="text-amber-800 font-bold">✓</span>
+                <span className="text-blue-700 font-bold">✓</span>
                 <span>Automated scan updates from central warehouse to local doorstep hub</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-amber-800 font-bold">✓</span>
+                <span className="text-blue-700 font-bold">✓</span>
                 <span>Automated WhatsApp notifications delivered for every checkpoint</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-amber-800 font-bold">✓</span>
+                <span className="text-blue-700 font-bold">✓</span>
                 <span>Transit Insurance protection: replacement dispatch for any lost parcel</span>
               </li>
             </ul>
@@ -416,7 +416,7 @@ const TrackOrder = () => {
 
           {/* Card 2: Need Help? */}
           <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-700 to-rose-700 text-white flex items-center justify-center shadow-md shadow-amber-900/15">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#1c2d4a] to-blue-700 text-white flex items-center justify-center shadow-md shadow-blue-900/15">
               <Headphones className="w-6 h-6 stroke-[2.5]" />
             </div>
 
@@ -429,15 +429,15 @@ const TrackOrder = () => {
 
             <ul className="text-xs space-y-2.5 text-slate-700 pt-2">
               <li className="flex items-start gap-2">
-                <span className="text-amber-800 font-bold">✓</span>
+                <span className="text-blue-700 font-bold">✓</span>
                 <span>Direct WhatsApp: <strong>+91 98400 12345</strong></span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-amber-800 font-bold">✓</span>
+                <span className="text-blue-700 font-bold">✓</span>
                 <span>Email Support: <strong>support@appzys.com</strong></span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-amber-800 font-bold">✓</span>
+                <span className="text-blue-700 font-bold">✓</span>
                 <span>Fulfillment Hub: Guindy Industrial Estate, Chennai - 600032</span>
               </li>
             </ul>
@@ -447,19 +447,19 @@ const TrackOrder = () => {
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white p-6 rounded-3xl border border-slate-200 text-center space-y-1 shadow-2xs">
-            <div className="text-2xl sm:text-3xl font-serif font-black text-amber-900">100%</div>
+            <div className="text-2xl sm:text-3xl font-serif font-black text-[#1c2d4a]">100%</div>
             <div className="text-xs font-semibold text-slate-600">Transit Insured</div>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-200 text-center space-y-1 shadow-2xs">
-            <div className="text-2xl sm:text-3xl font-serif font-black text-amber-900">19,000+</div>
+            <div className="text-2xl sm:text-3xl font-serif font-black text-[#1c2d4a]">19,000+</div>
             <div className="text-xs font-semibold text-slate-600">Pincodes Covered</div>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-200 text-center space-y-1 shadow-2xs">
-            <div className="text-2xl sm:text-3xl font-serif font-black text-amber-900">24/7</div>
+            <div className="text-2xl sm:text-3xl font-serif font-black text-[#1c2d4a]">24/7</div>
             <div className="text-xs font-semibold text-slate-600">WhatsApp Alert Bot</div>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-200 text-center space-y-1 shadow-2xs">
-            <div className="text-2xl sm:text-3xl font-serif font-black text-amber-900">24 Hrs</div>
+            <div className="text-2xl sm:text-3xl font-serif font-black text-[#1c2d4a]">24 Hrs</div>
             <div className="text-xs font-semibold text-slate-600">Dispatch Guarantee</div>
           </div>
         </div>
@@ -476,7 +476,7 @@ const TrackOrder = () => {
 
           <button
             onClick={handleReset}
-            className="px-6 py-3 rounded-2xl bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs flex items-center gap-2 transition cursor-pointer shadow-md shadow-amber-900/15"
+            className="px-6 py-3 rounded-2xl bg-[#1c2d4a] hover:bg-[#15233b] text-white font-bold text-xs flex items-center gap-2 transition cursor-pointer shadow-md shadow-blue-900/15"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Clear / Track Another</span>

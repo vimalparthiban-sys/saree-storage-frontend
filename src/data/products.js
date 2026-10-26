@@ -17,8 +17,10 @@ export const products = [
     perfectFor: ['Sarees & Traditional Wear', 'Clothes & Accessories', 'Blankets & Seasonal Storage'],
     images: [
       '/images/saree-organiser-1.jpg',
-      '/images/saree-organiser-2.jpg',
-      '/images/saree-organiser-3.jpg'
+      '/images/saree-organiser-steel-frame.jpg',
+      '/images/saree-organiser-dimensions.jpg',
+      '/images/saree-organiser-before-after.jpg',
+      '/images/saree-organiser-features.jpg'
     ],
     sizes: ['60 Liters (50 x 40 x 30 cm - 15 to 18 Sarees)'],
     colors: [
@@ -138,9 +140,11 @@ export const products = [
     specs: 'Compact Portable Case • Multi-Tier Compartments with Lock Clasp',
     perfectFor: ['Earrings & Rings', 'Necklaces & Chains', 'Bangles & Bracelets', 'Personal Use & Gifting'],
     images: [
-      '/images/appzys-jewellery-organiser.jpg',
-      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80'
+      '/images/jewel-organiser-1.jpg',
+      '/images/jewel-organiser-2.jpg',
+      '/images/jewel-organiser-3.jpg',
+      '/images/jewel-organiser-4.jpg',
+      '/images/jewel-organiser-5.jpg'
     ],
     sizes: ['Compact Travel Size (Fits inside Handbags & Wardrobe Shelves)'],
     colors: [

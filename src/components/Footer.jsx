@@ -82,11 +82,6 @@ const Footer = () => {
               <li>✓ Heavy-Duty Steel Frame Technology</li>
               <li>✓ Luxury Dust & Moisture-Proof Fabric</li>
               <li>✓ 100% Cash on Delivery (COD) Across India</li>
-              <li className="pt-2">
-                <Link to="/admin" className="text-blue-400 hover:underline font-semibold flex items-center gap-1">
-                  🔒 Admin Store Portal
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
