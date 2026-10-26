@@ -1,22 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, CheckCircle2, Sparkles, Check, X, Play, Pause, Lock, ShieldCheck } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Sparkles, Check, X, Play, Pause, Lock, ShieldCheck, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductDemoSection = ({ product }) => {
   if (!product || !product.demo) return null;
 
   const [activeStep, setActiveStep] = useState(1);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const { demo, comparison } = product;
   const isJewel = product?.id === 'jewellery-organiser' || product?.categorySlug === 'jewel-organiser';
 
-  // Auto-cycle through the 3 steps smoothly every 4 seconds
+  const getVideoSrc = (step) => {
+    if (isJewel) {
+      return step === 1
+        ? '/videos/jewel_step1.mp4'
+        : step === 2
+        ? '/videos/jewel_step2.mp4'
+        : '/videos/jewel_step3.mp4';
+    }
+    return step === 1
+      ? '/videos/step1_popup.mp4'
+      : step === 2
+      ? '/videos/step2_pack.mp4'
+      : '/videos/step3_pull.mp4';
+  };
+
+  // Auto-cycle through the 3 steps smoothly every 4 seconds (pause when modal open or user interacts)
   useEffect(() => {
-    if (!isAutoPlay) return;
+    if (!isAutoPlay || isVideoModalOpen) return;
     const timer = setInterval(() => {
       setActiveStep((prev) => (prev % 3) + 1);
     }, 4200);
     return () => clearInterval(timer);
-  }, [isAutoPlay]);
+  }, [isAutoPlay, isVideoModalOpen]);
+
+  // Keyboard navigation & body scroll lock for Fullscreen Video Modal
+  useEffect(() => {
+    if (!isVideoModalOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsVideoModalOpen(false);
+      } else if (e.key === 'ArrowLeft') {
+        setActiveStep((prev) => (prev === 1 ? 3 : prev - 1));
+      } else if (e.key === 'ArrowRight') {
+        setActiveStep((prev) => (prev === 3 ? 1 : prev + 1));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isVideoModalOpen]);
 
   return (
     <div className="space-y-16">
@@ -134,29 +174,24 @@ const ProductDemoSection = ({ product }) => {
           </div>
 
           {/* Right Column: Real Cropped Video Player */}
-          <div className="lg:col-span-6 relative bg-slate-950 rounded-2xl p-1.5 sm:p-2 border border-slate-800 shadow-2xl overflow-hidden flex flex-col items-center justify-center aspect-[18/13] max-w-lg mx-auto w-full select-none group">
+          <div 
+            onClick={() => {
+              setIsVideoModalOpen(true);
+              setIsAutoPlay(false);
+            }}
+            className="lg:col-span-6 relative bg-slate-950 rounded-2xl p-1.5 sm:p-2 border border-slate-800 shadow-2xl overflow-hidden flex flex-col items-center justify-center aspect-[18/13] max-w-lg mx-auto w-full select-none group cursor-zoom-in transition hover:border-slate-700 hover:shadow-sky-950/30"
+            title="Click to view full screen video"
+          >
             
             {/* The Real Video Clip corresponding to the active step */}
             <video
               key={`${product?.id}-${activeStep}`}
-              src={
-                isJewel
-                  ? activeStep === 1
-                    ? '/videos/jewel_step1.mp4'
-                    : activeStep === 2
-                    ? '/videos/jewel_step2.mp4'
-                    : '/videos/jewel_step3.mp4'
-                  : activeStep === 1
-                  ? '/videos/step1_popup.mp4'
-                  : activeStep === 2
-                  ? '/videos/step2_pack.mp4'
-                  : '/videos/step3_pull.mp4'
-              }
+              src={getVideoSrc(activeStep)}
               autoPlay
               loop
               muted
               playsInline
-              className="w-full h-full object-cover rounded-xl shadow-2xl"
+              className="w-full h-full object-cover rounded-xl shadow-2xl transition duration-300 group-hover:scale-[1.02]"
             />
 
             {/* Dynamic Step Header Badge */}
@@ -175,6 +210,12 @@ const ProductDemoSection = ({ product }) => {
                   ? 'Top Pack: Bulk Clothes & Sarees'
                   : 'Stack & Pull: Front Window Slide-Out'}
               </span>
+            </div>
+
+            {/* Fullscreen Expand Hint Pill (Top-Right) */}
+            <div className="absolute top-4 right-4 bg-slate-900/85 hover:bg-[#1c2d4a] text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-xl backdrop-blur-md flex items-center gap-1.5 transition shadow-lg border border-white/10 group-hover:scale-105">
+              <Maximize2 className="w-3.5 h-3.5 text-sky-300" />
+              <span className="hidden sm:inline">Full screen</span>
             </div>
 
             {/* Bottom Bar: Action Pill & Live Tag */}
@@ -202,6 +243,96 @@ const ProductDemoSection = ({ product }) => {
 
         </div>
       </section>
+
+      {/* Fullscreen Video Modal (Opens when video is clicked) */}
+      {isVideoModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in duration-150 select-none"
+          onClick={() => setIsVideoModalOpen(false)}
+        >
+          {/* Top-Left Close (✕) Button */}
+          <button
+            onClick={() => setIsVideoModalOpen(false)}
+            className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 p-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+            aria-label="Close fullscreen video view"
+            title="Close (Esc)"
+          >
+            <X className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2]" />
+          </button>
+
+          {/* Top Header: Step Badge */}
+          <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 z-40 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-white text-xs sm:text-sm font-semibold flex items-center gap-2 shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+            <span>
+              Step {activeStep} of 3: {demo.steps[activeStep - 1]?.title}
+            </span>
+          </div>
+
+          {/* Backward / Previous Step Arrow Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveStep((prev) => (prev === 1 ? 3 : prev - 1));
+            }}
+            className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-40 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md shadow-xl rounded-full p-2.5 sm:p-3.5 text-white transition cursor-pointer active:scale-95"
+            aria-label="Previous Step"
+            title="Previous step (Left Arrow)"
+          >
+            <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" />
+          </button>
+
+          {/* Center Stage: Fullscreen Clean Video Only */}
+          <div
+            className="w-full h-full flex items-center justify-center p-4 sm:p-12 max-w-5xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              key={`fullscreen-${product?.id}-${activeStep}`}
+              src={getVideoSrc(activeStep)}
+              autoPlay
+              loop
+              controls
+              playsInline
+              className="max-w-[92vw] max-h-[78vh] sm:max-h-[82vh] w-auto h-auto rounded-2xl shadow-2xl border border-white/10 object-contain bg-black"
+            />
+          </div>
+
+          {/* Forward / Next Step Arrow Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveStep((prev) => (prev === 3 ? 1 : prev + 1));
+            }}
+            className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-40 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md shadow-xl rounded-full p-2.5 sm:p-3.5 text-white transition cursor-pointer active:scale-95"
+            aria-label="Next Step"
+            title="Next step (Right Arrow)"
+          >
+            <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7" />
+          </button>
+
+          {/* Bottom: Step Dots Indicator ONLY */}
+          <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 sm:gap-3">
+            {demo.steps.map((s) => (
+              <button
+                key={s.step}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveStep(s.step);
+                }}
+                className={`transition-all rounded-full cursor-pointer ${
+                  activeStep === s.step
+                    ? 'w-7 sm:w-8 h-2 sm:h-2.5 bg-sky-400 shadow-md'
+                    : 'w-2 sm:w-2.5 h-2 sm:h-2.5 bg-white/40 hover:bg-white/70'
+                }`}
+                aria-label={`Jump to step ${s.step}`}
+                title={`Step ${s.step}: ${s.title}`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* 2. Dedicated Comparison for this Product */}
       {comparison && (
