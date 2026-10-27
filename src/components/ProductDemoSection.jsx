@@ -191,6 +191,7 @@ const ProductDemoSection = ({ product }) => {
               loop
               muted
               playsInline
+              preload="metadata"
               className="w-full h-full object-cover rounded-xl shadow-2xl transition duration-300 group-hover:scale-[1.02]"
             />
 

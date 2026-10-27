@@ -157,6 +157,31 @@ const ProductDetail = () => {
     setSelectedImageIndex((prev) => (prev < product.images.length - 1 ? prev + 1 : prev));
   };
 
+  // Track recently viewed products in localStorage for Flipkart-style Account page
+  useEffect(() => {
+    if (!product) return;
+    try {
+      const stored = JSON.parse(localStorage.getItem('appzys_recently_viewed') || '[]');
+      const filtered = stored.filter((p) => p.id !== product.id);
+      const updated = [
+        {
+          id: product.id,
+          title: product.cardTitle || product.title,
+          shortTitle: product.shortTitle || product.title,
+          image: product.images?.[0] || '/placeholder.jpg',
+          price: product.basePrice,
+          mrp: product.mrp,
+          brand: product.brand,
+          category: product.category,
+        },
+        ...filtered,
+      ].slice(0, 10);
+      localStorage.setItem('appzys_recently_viewed', JSON.stringify(updated));
+    } catch (e) {
+      console.warn('Could not save recently viewed:', e);
+    }
+  }, [product]);
+
   // Keyboard navigation & body scroll lock for Lightbox Modal
   useEffect(() => {
     if (!isLightboxOpen) return;
@@ -836,14 +861,14 @@ const ProductDetail = () => {
         <div className="flex flex-col min-w-0">
           <div className="flex items-baseline gap-1.5">
             <span className="text-base font-black text-slate-900">
-              ₹ {selectedPack.price}.00
+              ₹ {currentPack?.price || product.basePrice}.00
             </span>
             <span className="text-[11px] text-slate-400 line-through">
-              ₹ {selectedPack.mrp}
+              ₹ {currentPack?.mrp || product.mrp}
             </span>
           </div>
           <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded w-fit truncate">
-            {selectedPack.qty} Pack • Free Express Delivery
+            {currentPack?.qty || 1} Pack • Free Express Delivery
           </span>
         </div>
 

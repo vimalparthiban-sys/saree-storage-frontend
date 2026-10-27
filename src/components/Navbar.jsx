@@ -407,26 +407,19 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Right: Cart & Hamburger */}
+          {/* Right: Cart */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative flex items-center gap-1 bg-[#1c2d4a] text-white px-2.5 py-1.5 rounded-xl font-bold text-xs"
+              className="relative flex items-center gap-1.5 bg-[#1c2d4a] text-white px-3 py-1.5 rounded-xl font-bold text-xs shadow-xs active:scale-95 transition"
             >
               <ShoppingBag className="w-3.5 h-3.5" />
               <span>Cart</span>
               {totalItemCount > 0 && (
-                <span className="bg-amber-400 text-slate-950 font-black text-[10px] px-1 py-0.2 rounded-full min-w-4 h-4 flex items-center justify-center">
+                <span className="bg-amber-400 text-slate-950 font-black text-[10px] px-1.5 py-0.2 rounded-full min-w-4.5 h-4.5 flex items-center justify-center">
                   {totalItemCount}
                 </span>
               )}
-            </button>
-
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-1.5 rounded-xl text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5 text-slate-900" /> : <Menu className="w-5 h-5 text-slate-900" />}
             </button>
           </div>
         </div>
@@ -452,116 +445,6 @@ const Navbar = () => {
           )}
         </form>
       </div>
-
-      {/* Mobile Slide-Down Drawer */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 shadow-xl px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-200">
-          <div className="space-y-1">
-            <Link
-              to="/"
-              onClick={handleGoHome}
-              className={`block px-3 py-2 rounded-xl text-xs font-bold ${
-                location.pathname === '/' && !location.search ? 'bg-blue-50/60 text-[#1c2d4a]' : 'text-slate-800'
-              }`}
-            >
-              🏠 Home (All Products)
-            </Link>
-
-            <div className="border border-slate-100 rounded-xl overflow-hidden">
-              <button
-                onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
-                className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-slate-800 bg-slate-50"
-              >
-                <span>📦 Shop by Category</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMobileCategoryOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {isMobileCategoryOpen && (
-                <div className="bg-white p-2 space-y-1 border-t border-slate-100">
-                  <button
-                    onClick={handleGoHome}
-                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:text-[#1c2d4a] hover:bg-slate-50 transition"
-                  >
-                    All Products
-                  </button>
-                  <button
-                    onClick={() => handleSelectProduct('saree-organiser')}
-                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:text-[#1c2d4a] hover:bg-slate-50 transition"
-                  >
-                    Saree Organizer
-                  </button>
-                  <button
-                    onClick={() => handleSelectProduct('jewel-organiser')}
-                    className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:text-[#1c2d4a] hover:bg-slate-50 transition"
-                  >
-                    Jewellery Organizer
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <Link
-              to="/track-order"
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold ${
-                location.pathname === '/track-order' ? 'bg-blue-50/60 text-[#1c2d4a]' : 'text-slate-800'
-              }`}
-            >
-              <Truck className="w-3.5 h-3.5 text-[#1c2d4a]" />
-              <span>Track Your Order</span>
-            </Link>
-
-            <Link
-              to="/contact"
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold ${
-                location.pathname === '/contact' ? 'text-[#1c2d4a] font-bold' : 'text-slate-800'
-              }`}
-            >
-              <Phone className="w-3.5 h-3.5 text-slate-500" />
-              <span>Contact Us</span>
-            </Link>
-
-            <div className="pt-2 border-t border-slate-100 space-y-1.5">
-              <Link
-                to="/my-orders"
-                className="flex items-center justify-between px-3 py-2 text-xs font-bold text-slate-700 bg-slate-50 rounded-xl"
-              >
-                <span className="flex items-center gap-2">
-                  <PackageCheck className="w-3.5 h-3.5 text-amber-800" />
-                  <span>My Orders</span>
-                </span>
-                <span className="text-slate-400">→</span>
-              </Link>
-
-              {isAdmin && (
-                <Link
-                  to="/admin"
-                  className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-rose-700 bg-rose-50 rounded-xl border border-rose-200"
-                >
-                  <Shield className="w-3.5 h-3.5" />
-                  <span>Admin Portal</span>
-                </Link>
-              )}
-
-              {user ? (
-                <button
-                  onClick={logout}
-                  className="w-full text-left px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-2"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>Logout ({user.name})</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => openAuth('login', 'CUSTOMER')}
-                  className="w-full py-2 bg-slate-900 text-white font-bold rounded-xl text-xs text-center"
-                >
-                  Customer Login
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
     </header>
   );

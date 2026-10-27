@@ -9,6 +9,7 @@ import ContactUs from './pages/ContactUs';
 import OrderSuccess from './pages/OrderSuccess';
 import AdminDashboard from './pages/AdminDashboard';
 import CustomerOrders from './pages/CustomerOrders';
+import Account from './pages/Account';
 
 // Global Modals and Drawers (Always accessible from Navbar everywhere)
 import CartDrawer from './components/CartDrawer';
@@ -29,6 +30,8 @@ function App() {
             <Route path="/order-success/:orderId" element={<OrderSuccess />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/my-orders" element={<CustomerOrders />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/profile" element={<Account />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
 
