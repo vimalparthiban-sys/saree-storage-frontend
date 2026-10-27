@@ -62,13 +62,13 @@ const ProductDemoSection = ({ product }) => {
     <div className="space-y-16">
       
       {/* 1. Dedicated 3-Step Demo for this Product */}
-      <section className="py-12 bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-xs">
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
+      <section className="py-6 sm:py-12 bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-10 shadow-xs">
+        <div className="text-center max-w-3xl mx-auto space-y-2.5 mb-6 sm:mb-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-[#1c2d4a] text-xs font-bold border border-blue-200 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-[#1c2d4a]" />
             <span>{demo.badge}</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
+          <h2 className="text-xl sm:text-3xl font-serif font-bold text-slate-900">
             {demo.headline}
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm">
@@ -76,8 +76,8 @@ const ProductDemoSection = ({ product }) => {
           </p>
         </div>
 
-        {/* Step Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {/* Step Buttons (Swipe horizontally on mobile, 3-col grid on desktop) */}
+        <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-3 sm:gap-4 mb-6 sm:mb-8 pb-2 px-1 snap-x snap-mandatory no-scrollbar touch-pan-x">
           {demo.steps.map((s) => (
             <button
               key={s.step}
@@ -85,7 +85,7 @@ const ProductDemoSection = ({ product }) => {
                 setActiveStep(s.step);
                 setIsAutoPlay(false);
               }}
-              className={`text-left p-4 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
+              className={`w-[74vw] sm:w-[280px] md:w-auto shrink-0 md:shrink snap-center md:snap-align-none text-left p-4 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
                 activeStep === s.step
                   ? 'bg-blue-50/80 border-[#1c2d4a] shadow-md ring-2 ring-[#1c2d4a]/20'
                   : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
@@ -102,7 +102,7 @@ const ProductDemoSection = ({ product }) => {
                 </span>
               </div>
               <h3 className="font-bold text-xs sm:text-sm text-slate-900 mb-1">{s.title}</h3>
-              <p className="text-[11px] text-slate-500">{s.subtitle}</p>
+              <p className="text-[11px] text-slate-500 line-clamp-1 sm:line-clamp-none">{s.subtitle}</p>
 
               {/* Active Step Bottom Accent */}
               {activeStep === s.step && (
@@ -113,7 +113,7 @@ const ProductDemoSection = ({ product }) => {
         </div>
 
         {/* Step Content Box with Grand Animated Visualizer */}
-        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-[#0e1b2e] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-[#0e1b2e] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl border border-slate-800 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
           
           {/* Left Description Column */}
           <div className="lg:col-span-6 space-y-4">

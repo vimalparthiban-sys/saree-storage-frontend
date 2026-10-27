@@ -10,7 +10,7 @@ import AuthModal from '../components/AuthModal';
 import SizeGuideModal from '../components/SizeGuideModal';
 import ProductDemoSection from '../components/ProductDemoSection';
 import NewsletterBanner from '../components/NewsletterBanner';
-import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, ChevronLeft, Minus, Plus, X, Maximize2 } from 'lucide-react';
+import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, ChevronLeft, Minus, Plus, X, Maximize2, ShoppingBag, ArrowRight } from 'lucide-react';
 
 const getRelativeDateString = (timestampOrDateStr) => {
   if (!timestampOrDateStr) return 'Just now';
@@ -197,7 +197,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden pb-20 md:pb-0">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 w-full space-y-8 sm:space-y-12">
@@ -822,11 +822,52 @@ const ProductDetail = () => {
 
       {/* Toast Notification for Review Submission */}
       {reviewToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#1c2d4a] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-3 duration-200">
+        <div className="fixed bottom-20 md:bottom-6 right-6 z-50 bg-[#1c2d4a] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-3 duration-200">
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
           <span className="text-xs sm:text-sm font-semibold">{reviewToast}</span>
         </div>
       )}
+
+      {/* Mobile-Only Sticky Bottom Buy Bar (Flipkart / Amazon App Style) */}
+      <div 
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2.5 px-4 flex items-center justify-between gap-3 shadow-2xl select-none"
+        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
+      >
+        <div className="flex flex-col min-w-0">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-base font-black text-slate-900">
+              ₹ {selectedPack.price}.00
+            </span>
+            <span className="text-[11px] text-slate-400 line-through">
+              ₹ {selectedPack.mrp}
+            </span>
+          </div>
+          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded w-fit truncate">
+            {selectedPack.qty} Pack • Free Express Delivery
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleAddToCart}
+            type="button"
+            className="p-2.5 rounded-xl border border-slate-300 text-slate-700 hover:text-[#1c2d4a] hover:border-[#1c2d4a] transition cursor-pointer active:scale-95 bg-white shadow-xs"
+            aria-label="Add to Cart"
+            title="Add to cart"
+          >
+            <ShoppingBag className="w-5 h-5 stroke-[2]" />
+          </button>
+          
+          <button
+            onClick={handleBuyNow}
+            type="button"
+            className="bg-[#1c2d4a] hover:bg-[#13223f] text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer active:scale-95 whitespace-nowrap"
+          >
+            <span>Buy Now</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

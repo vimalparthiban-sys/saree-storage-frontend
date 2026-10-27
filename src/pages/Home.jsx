@@ -10,6 +10,7 @@ import CartDrawer from '../components/CartDrawer';
 import CheckoutModal from '../components/CheckoutModal';
 import AuthModal from '../components/AuthModal';
 import SizeGuideModal from '../components/SizeGuideModal';
+import MobileBottomNav from '../components/MobileBottomNav';
 import { Search, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductCardImage = ({ product }) => {
@@ -131,7 +132,7 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-amber-100 selection:text-amber-900 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-amber-100 selection:text-amber-900 overflow-x-hidden pb-16 md:pb-0">
       <AnnouncementBar />
       <Navbar />
 
@@ -180,8 +181,54 @@ const Home = () => {
         </div>
       </section>
 
-      <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 w-full space-y-8 sm:space-y-12">
+      <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 w-full space-y-6 sm:space-y-12">
         
+        {/* Mobile Quick Category Chips (Flipkart App Style) */}
+        <div className="flex md:hidden items-center gap-2 overflow-x-auto no-scrollbar py-1 px-1 -mx-1 text-xs">
+          <button
+            onClick={() => {
+              const newParams = new URLSearchParams(searchParams);
+              newParams.delete('category');
+              setSearchParams(newParams);
+            }}
+            className={`px-3.5 py-2 rounded-full shrink-0 font-bold text-xs transition cursor-pointer border ${
+              !activeCategory
+                ? 'bg-[#1c2d4a] text-white border-[#1c2d4a] shadow-xs'
+                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            ✨ All ({products.length})
+          </button>
+          <button
+            onClick={() => {
+              const newParams = new URLSearchParams(searchParams);
+              newParams.set('category', 'saree-organiser');
+              setSearchParams(newParams);
+            }}
+            className={`px-3.5 py-2 rounded-full shrink-0 font-bold text-xs transition cursor-pointer border ${
+              activeCategory === 'saree-organiser'
+                ? 'bg-[#1c2d4a] text-white border-[#1c2d4a] shadow-xs'
+                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            🥻 Saree Boxes (60L)
+          </button>
+          <button
+            onClick={() => {
+              const newParams = new URLSearchParams(searchParams);
+              newParams.set('category', 'jewel-organiser');
+              setSearchParams(newParams);
+            }}
+            className={`px-3.5 py-2 rounded-full shrink-0 font-bold text-xs transition cursor-pointer border ${
+              activeCategory === 'jewel-organiser'
+                ? 'bg-[#1c2d4a] text-white border-[#1c2d4a] shadow-xs'
+                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            💍 Jewellery Cases
+          </button>
+        </div>
+
         {/* 2. Responsive Header & Filter / Sort Strip */}
         <div className="space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3 sm:pb-4">
@@ -263,29 +310,57 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 3. Responsive Product Catalog Grid (Minimalist & Modern, matching Reference 2) */}
-        <div className={`grid grid-cols-1 ${filteredProducts.length === 1 ? 'max-w-xl mx-auto' : 'sm:grid-cols-2 max-w-4xl mx-auto'} gap-5 sm:gap-8`}>
+        {/* Mobile Swipe Cue Banner (Flipkart App Style) */}
+        <div className="flex md:hidden items-center justify-between pb-1 px-1">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            Explore Storage Solutions
+          </span>
+          <span className="text-[10px] font-bold text-blue-800 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <span>Swipe items</span>
+            <span>→</span>
+          </span>
+        </div>
+
+        {/* 3. Product Catalog: Left-to-Right Horizontal Swipe on Mobile (Flipkart style), Grid on Desktop */}
+        <div className="flex md:grid md:grid-cols-2 max-w-4xl mx-auto overflow-x-auto md:overflow-visible gap-4 md:gap-8 pb-4 pt-1 px-4 -mx-4 md:px-0 md:mx-auto snap-x snap-mandatory no-scrollbar touch-pan-x">
           {filteredProducts.map((p) => (
             <Link
               key={p.id}
               to={`/product/${p.id}`}
-              className="group bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer"
+              className="w-[82vw] sm:w-[320px] md:w-full shrink-0 md:shrink snap-center md:snap-align-none group bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer"
             >
               {/* Product Image Container with multi-image hover & arrow controls */}
               <ProductCardImage product={p} />
 
               {/* Bottom Info Section (Clean & Symmetrical: Category + Title & Rate) */}
-              <div className="bg-slate-50/70 p-4 sm:p-5 border-t border-slate-100 flex flex-col justify-between">
-                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                  {p.brand}
-                </span>
+              <div className="bg-slate-50/70 p-4 sm:p-5 border-t border-slate-100 flex flex-col justify-between flex-1">
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                      {p.brand}
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                      Save {p.discountPercent}%
+                    </span>
+                  </div>
 
-                <div className="flex items-start justify-between gap-3">
                   <h3 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#1c2d4a] transition line-clamp-2">
                     {p.cardTitle || p.title}
                   </h3>
-                  <span className="text-xs sm:text-sm font-bold text-slate-900 shrink-0 text-right whitespace-nowrap">
-                    From ₹ {p.basePrice}.00
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-slate-200/60 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs sm:text-sm font-black text-slate-900">
+                      ₹ {p.basePrice}.00
+                    </span>
+                    <span className="text-[11px] text-slate-400 line-through ml-1.5">
+                      ₹ {p.mrp}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-bold text-[#1c2d4a] bg-blue-50 group-hover:bg-[#1c2d4a] group-hover:text-white px-2.5 py-1 rounded-lg border border-blue-100 transition flex items-center gap-1 shadow-2xs">
+                    View & Buy
+                    <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
               </div>
@@ -305,6 +380,9 @@ const Home = () => {
 
       {/* Drawers & Modals */}
       <SizeGuideModal />
+
+      {/* Mobile-Only Bottom Navigation Bar (Option a) */}
+      <MobileBottomNav />
     </div>
   );
 };

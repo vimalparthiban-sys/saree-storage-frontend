@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import MobileBottomNav from '../components/MobileBottomNav';
 import { useCart } from '../context/CartContext';
 import {
   CheckCircle2,
@@ -76,7 +77,7 @@ const TrackOrder = () => {
   const isDelivered = status === 'DELIVERED';
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900 pb-20 md:pb-0">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full space-y-8">
@@ -485,6 +486,7 @@ const TrackOrder = () => {
       </main>
 
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 };
