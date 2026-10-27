@@ -83,6 +83,15 @@ const Account = () => {
     feedback: true
   });
 
+  // 4. Privacy Center State (Flipkart Style matching user screenshots)
+  const [dataRequestChecks, setDataRequestChecks] = useState({
+    all: false,
+    addresses: false,
+    orders: false,
+    profile: false
+  });
+  const [generalPolicyAccepted, setGeneralPolicyAccepted] = useState(false);
+
   // Load recently viewed products from localStorage
   useEffect(() => {
     try {
@@ -619,56 +628,496 @@ const Account = () => {
   }
 
   // =========================================================================
-  // SUB-VIEW 5: PRIVACY CENTER FULL PAGE
+  // SUB-VIEW 5: PRIVACY CENTER HOME (Matching Flipkart Image 1)
   // =========================================================================
   if (activeView === 'privacy') {
+    return (
+      <div className="min-h-screen bg-slate-100/60 text-slate-900 pb-20 select-none">
+        {/* Top Header (Clean white header with back arrow matching Image 1) */}
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 py-3.5 flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveView('main')}
+              className="p-1 -ml-1 rounded-full text-slate-800 hover:bg-slate-100 transition cursor-pointer"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <h1 className="text-base font-semibold text-slate-900">Privacy Center</h1>
+          </div>
+        </header>
+
+        {/* Menu list on white background (Matching Image 1, Grievance Redressal excluded) */}
+        <main className="bg-white border-b border-slate-200 divide-y divide-slate-100">
+          <button
+            onClick={() => setActiveView('privacy-policy')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-slate-800">Privacy Policy</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+
+          <button
+            onClick={() => setActiveView('privacy-data')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-slate-800">Request My Data</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+
+          <button
+            onClick={() => setActiveView('privacy-consent')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-slate-800">Consent Management</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+
+          <button
+            onClick={() => setActiveView('privacy-deactivate')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-[#2874f0]">De-activate my Account</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+
+          <button
+            onClick={() => setActiveView('privacy-delete')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-[#2874f0]">Delete my Account</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+        </main>
+
+        <MobileBottomNav />
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // SUB-VIEW 5B: REQUEST YOUR DATA (Matching Flipkart Image 2)
+  // =========================================================================
+  if (activeView === 'privacy-data') {
+    return (
+      <div className="min-h-screen bg-white text-slate-900 pb-20 select-none">
+        {/* Blue Header matching Flipkart Image 2 */}
+        <header className="bg-[#2874f0] text-white px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveView('privacy')}
+              className="p-1 -ml-1 text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <h1 className="text-base font-medium text-white">Request Your Data</h1>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/?focus=search')}
+              className="text-white hover:opacity-80 transition"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="text-white hover:opacity-80 transition relative"
+              aria-label="Cart"
+            >
+              <ShoppingBag className="w-5 h-5 stroke-[2]" />
+              {totalItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[9px] w-4 h-4 flex items-center justify-center font-bold">
+                  {totalItemCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </header>
+
+        <main className="max-w-lg mx-auto p-4 space-y-4">
+          <h2 className="text-base font-bold text-slate-900 pt-1">
+            Select the required data
+          </h2>
+
+          <div className="divide-y divide-slate-100 border-t border-b border-slate-100">
+            {/* 1. Request all your data */}
+            <div
+              onClick={() => {
+                const nextVal = !dataRequestChecks.all;
+                setDataRequestChecks({
+                  all: nextVal,
+                  addresses: nextVal,
+                  orders: nextVal,
+                  profile: nextVal
+                });
+              }}
+              className="py-4 flex items-start gap-3.5 cursor-pointer hover:bg-slate-50 transition"
+            >
+              <input
+                type="checkbox"
+                checked={dataRequestChecks.all}
+                onChange={() => {}}
+                className="mt-1 w-4 h-4 accent-[#2874f0] rounded border-slate-300"
+              />
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-slate-900">Request all your data</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  By requesting all your data, you will receive a zip folder with all the files containing ...Read more
+                </p>
+              </div>
+            </div>
+
+            {/* 2. Addresses */}
+            <div
+              onClick={() => setDataRequestChecks((prev) => ({ ...prev, addresses: !prev.addresses }))}
+              className="py-4 flex items-start gap-3.5 cursor-pointer hover:bg-slate-50 transition"
+            >
+              <input
+                type="checkbox"
+                checked={dataRequestChecks.addresses}
+                onChange={() => {}}
+                className="mt-1 w-4 h-4 accent-[#2874f0] rounded border-slate-300"
+              />
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-slate-900">Addresses</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  The zip file will contain all the addresses saved against your Account
+                </p>
+              </div>
+            </div>
+
+            {/* 3. Your Orders */}
+            <div
+              onClick={() => setDataRequestChecks((prev) => ({ ...prev, orders: !prev.orders }))}
+              className="py-4 flex items-start gap-3.5 cursor-pointer hover:bg-slate-50 transition"
+            >
+              <input
+                type="checkbox"
+                checked={dataRequestChecks.orders}
+                onChange={() => {}}
+                className="mt-1 w-4 h-4 accent-[#2874f0] rounded border-slate-300"
+              />
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-slate-900">Your Orders</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  The zip file will contain information about the orders placed on APPZYS using your acco...Read more
+                </p>
+              </div>
+            </div>
+
+            {/* 4. Profile Information */}
+            <div
+              onClick={() => setDataRequestChecks((prev) => ({ ...prev, profile: !prev.profile }))}
+              className="py-4 flex items-start gap-3.5 cursor-pointer hover:bg-slate-50 transition"
+            >
+              <input
+                type="checkbox"
+                checked={dataRequestChecks.profile}
+                onChange={() => {}}
+                className="mt-1 w-4 h-4 accent-[#2874f0] rounded border-slate-300"
+              />
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-slate-900">Profile Information</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  The zip file will contain your profile information such as name, phone number, PAN, GST e...Read more
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              if (!dataRequestChecks.all && !dataRequestChecks.addresses && !dataRequestChecks.orders && !dataRequestChecks.profile) {
+                handleActionToast('Please select at least one data category');
+                return;
+              }
+              handleActionToast('Request submitted! A zip folder will be emailed within 24 hours.');
+              setTimeout(() => setActiveView('privacy'), 1200);
+            }}
+            type="button"
+            className="w-full mt-6 py-3 rounded-xl bg-[#2874f0] hover:bg-blue-600 text-white font-bold text-sm shadow-md transition active:scale-98 cursor-pointer"
+          >
+            Submit Request
+          </button>
+        </main>
+
+        <MobileBottomNav />
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // SUB-VIEW 5C: CONSENT MANAGEMENT (Matching Flipkart Image 3)
+  // =========================================================================
+  if (activeView === 'privacy-consent') {
+    return (
+      <div className="min-h-screen bg-slate-100/60 text-slate-900 pb-20 select-none">
+        {/* Blue Header matching Flipkart Image 3 */}
+        <header className="bg-[#2874f0] text-white px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveView('privacy')}
+              className="p-1 -ml-1 text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <h1 className="text-base font-medium text-white">Consent Management</h1>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/?focus=search')}
+              className="text-white hover:opacity-80 transition"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="text-white hover:opacity-80 transition relative"
+              aria-label="Cart"
+            >
+              <ShoppingBag className="w-5 h-5 stroke-[2]" />
+              {totalItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[9px] w-4 h-4 flex items-center justify-center font-bold">
+                  {totalItemCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </header>
+
+        {/* Consent Items on White Card matching Image 3 */}
+        <main className="bg-white border-b border-slate-200 divide-y divide-slate-100">
+          {/* General Policy + Accept Link */}
+          <div className="px-5 py-4 flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-900">APPZYS General Policy</span>
+            <button
+              type="button"
+              onClick={() => {
+                const nextState = !generalPolicyAccepted;
+                setGeneralPolicyAccepted(nextState);
+                handleActionToast(nextState ? 'Policy accepted ✓' : 'Consent withdrawn');
+              }}
+              className="text-sm font-bold text-[#2874f0] hover:underline cursor-pointer"
+            >
+              {generalPolicyAccepted ? 'Accepted ✓' : 'Accept'}
+            </button>
+          </div>
+
+          {/* Terms of use */}
+          <button
+            onClick={() => setActiveView('privacy-terms')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-slate-800">Terms of use</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+
+          {/* Privacy Policy */}
+          <button
+            onClick={() => setActiveView('privacy-policy')}
+            type="button"
+            className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
+          >
+            <span className="text-sm font-normal text-slate-800">Privacy Policy</span>
+            <ChevronRight className="w-4 h-4 text-slate-400 stroke-[1.8]" />
+          </button>
+        </main>
+
+        <MobileBottomNav />
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // SUB-VIEW 5D: PRIVACY POLICY FULL TEXT (Matching Flipkart Image 4)
+  // =========================================================================
+  if (activeView === 'privacy-policy') {
+    return (
+      <div className="min-h-screen bg-white text-slate-900 pb-20 select-none">
+        {/* Blue Header matching Flipkart Image 4 */}
+        <header className="bg-[#2874f0] text-white px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveView('privacy')}
+              className="p-1 -ml-1 text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <h1 className="text-base font-medium text-white">Privacy Policy</h1>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/?focus=search')}
+              className="text-white hover:opacity-80 transition"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="text-white hover:opacity-80 transition relative"
+              aria-label="Cart"
+            >
+              <ShoppingBag className="w-5 h-5 stroke-[2]" />
+              {totalItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[9px] w-4 h-4 flex items-center justify-center font-bold">
+                  {totalItemCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </header>
+
+        <main className="max-w-2xl mx-auto p-4 sm:p-6 space-y-4 text-slate-800 text-xs sm:text-sm leading-relaxed">
+          {/* Language Selector Dropdown (Matching Image 4) */}
+          <div className="flex justify-end pt-1">
+            <div className="border border-slate-300 rounded-lg px-3 py-1.5 flex items-center gap-2 bg-white text-xs font-medium text-slate-700">
+              <span>English</span>
+              <ChevronRight className="w-3.5 h-3.5 rotate-90 text-slate-400" />
+            </div>
+          </div>
+
+          <h2 className="text-sm sm:text-base font-bold italic tracking-wide text-slate-900 uppercase">
+            PRIVACY POLICY
+          </h2>
+
+          <p className="text-xs text-slate-700 font-medium italic">
+            <strong>Disclaimer:</strong> In case of any discrepancy or difference, the English version will take precedence over the translation
+          </p>
+
+          <p className="text-xs text-slate-600 leading-relaxed italic">
+            We value the trust you place in us and recognize the importance of secure transactions and information privacy. This Privacy Policy describes how APPZYS Retail Private Limited and its affiliates, group companies and related parties (collectively "APPZYS", "we", "our", "us") collect, use, share or otherwise process your personal data through APPZYS website <a href="https://appzys.com" className="text-[#2874f0] underline">www.appzys.com</a>, its mobile application, and m-site (hereinafter referred to as the "Platform").
+          </p>
+
+          <p className="text-xs text-slate-600 leading-relaxed italic">
+            While you can browse sections of the Platform without the need of sharing any information with us, however, please note we do not offer any product or service under this Platform outside India and your personal data will primarily be stored and processed in India. By visiting this Platform, providing your information or availing our product/service, you expressly agree to be bound by the terms and conditions of this Privacy Policy, the <span onClick={() => setActiveView('privacy-terms')} className="text-[#2874f0] underline cursor-pointer">Terms of Use</span> and the applicable service/product terms and conditions.
+          </p>
+
+          <h3 className="text-xs sm:text-sm font-bold text-slate-900 pt-2">
+            Collection of Your Information
+          </h3>
+
+          <p className="text-xs text-slate-600 leading-relaxed italic">
+            When you use our Platform, we collect and store your information which is provided by you from time to time. Once you give us your personal data, you are not anonymous to us. Where possible, we indicate which fields are required and which fields are optional.
+          </p>
+
+          <h3 className="text-xs sm:text-sm font-bold text-slate-900 pt-2">
+            Security Precautions
+          </h3>
+
+          <p className="text-xs text-slate-600 leading-relaxed italic">
+            We maintain reasonable physical, electronic and procedural safeguards to protect your information. Whenever you access your account information, we offer the use of a secure server. Once your information is in our possession, we adhere to strict security guidelines protecting it against unauthorized access.
+          </p>
+        </main>
+
+        <MobileBottomNav />
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // SUB-VIEW 5E: TERMS OF USE FULL TEXT
+  // =========================================================================
+  if (activeView === 'privacy-terms') {
+    return (
+      <div className="min-h-screen bg-white text-slate-900 pb-20 select-none">
+        <header className="bg-[#2874f0] text-white px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveView('privacy-consent')}
+              className="p-1 -ml-1 text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
+            </button>
+            <h1 className="text-base font-medium text-white">Terms of use</h1>
+          </div>
+        </header>
+
+        <main className="max-w-2xl mx-auto p-4 sm:p-6 space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+          <h2 className="text-sm sm:text-base font-bold text-slate-900">
+            APPZYS Terms and Conditions
+          </h2>
+          <p>
+            Welcome to APPZYS. By accessing or using our platform, you agree to comply with and be bound by these terms.
+          </p>
+          <h3 className="font-bold text-slate-900">1. Usage of Platform</h3>
+          <p>
+            This document is an electronic record in terms of Information Technology Act, 2000. Products purchased on APPZYS are meant for personal and domestic usage.
+          </p>
+          <h3 className="font-bold text-slate-900">2. Warranty & Return Policy</h3>
+          <p>
+            All APPZYS Stainless Steel Frame Organisers come with a 1-Year structural warranty and a 7-day hassle-free return policy.
+          </p>
+        </main>
+
+        <MobileBottomNav />
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // SUB-VIEW 5F: DE-ACTIVATE MY ACCOUNT
+  // =========================================================================
+  if (activeView === 'privacy-deactivate') {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 select-none">
         <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 py-3.5 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setActiveView('main')}
-              className="p-1 rounded-full text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+              onClick={() => setActiveView('privacy')}
+              className="p-1 -ml-1 text-slate-800 hover:bg-slate-100 rounded-full transition cursor-pointer"
+              aria-label="Back"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
             </button>
-            <h1 className="text-base font-bold text-slate-900">Privacy Center</h1>
+            <h1 className="text-base font-semibold text-slate-900">De-activate my Account</h1>
           </div>
         </header>
 
         <main className="max-w-lg mx-auto p-4 space-y-4">
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm text-slate-900">Your Data is 100% Safe</h3>
-                <p className="text-xs text-slate-500">256-Bit SSL Bank-Grade Encryption</p>
-              </div>
-            </div>
-
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+            <h3 className="font-bold text-sm text-slate-900">Are you sure you want to deactivate?</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              APPZYS is committed to protecting your privacy. We never sell your personal information or contact details to third parties.
+              When you deactivate your APPZYS account:
             </p>
+            <ul className="text-xs text-slate-600 list-disc list-inside space-y-1">
+              <li>Your active orders and live tracking will remain on hold.</li>
+              <li>You will not receive marketing promotions or SMS offers.</li>
+              <li>You can reactivate anytime by logging back in.</li>
+            </ul>
 
-            <div className="space-y-2 pt-2 border-t border-slate-100">
+            <div className="pt-4 flex gap-3">
               <button
-                onClick={() => handleActionToast('Data export requested. Check your email.')}
+                onClick={() => setActiveView('privacy')}
                 type="button"
-                className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs text-left flex items-center justify-between hover:bg-slate-100 transition"
+                className="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer"
               >
-                <span>Download My Account Data</span>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                Cancel
               </button>
-
               <button
-                onClick={() => handleActionToast('Privacy Policy verified active')}
+                onClick={() => {
+                  handleActionToast('Account successfully deactivated');
+                  setTimeout(() => setActiveView('main'), 1000);
+                }}
                 type="button"
-                className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl font-bold text-xs text-left flex items-center justify-between hover:bg-slate-100 transition"
+                className="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-xs cursor-pointer"
               >
-                <span>Read APPZYS Privacy Policy</span>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                De-activate Account
               </button>
             </div>
           </div>
@@ -680,37 +1129,57 @@ const Account = () => {
   }
 
   // =========================================================================
-  // SUB-VIEW 6: MY SUBSCRIPTIONS FULL PAGE
+  // SUB-VIEW 5G: DELETE MY ACCOUNT
   // =========================================================================
-  if (activeView === 'subscriptions') {
+  if (activeView === 'privacy-delete') {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 select-none">
         <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 py-3.5 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setActiveView('main')}
-              className="p-1 rounded-full text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+              onClick={() => setActiveView('privacy')}
+              className="p-1 -ml-1 text-slate-800 hover:bg-slate-100 rounded-full transition cursor-pointer"
+              aria-label="Back"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
             </button>
-            <h1 className="text-base font-bold text-slate-900">My Subscriptions</h1>
+            <h1 className="text-base font-semibold text-slate-900">Delete my Account</h1>
           </div>
         </header>
 
         <main className="max-w-lg mx-auto p-4 space-y-4">
-          <div className="bg-gradient-to-br from-[#1c2d4a] to-[#0f1b2d] text-white rounded-3xl p-5 shadow-lg space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">
-                ACTIVE
-              </span>
-              <span className="text-xs text-slate-300">Lifetime Free</span>
-            </div>
-            <h3 className="text-lg font-serif font-bold text-white">APPZYS VIP Club Membership</h3>
-            <ul className="text-xs text-slate-200 space-y-1.5 pt-1">
-              <li>✓ Free Express Shipping on all orders</li>
-              <li>✓ Flat 40% Festive discount on bundles</li>
-              <li>✓ 1-Year stainless steel frame warranty</li>
+          <div className="bg-white rounded-2xl border border-rose-200 p-5 space-y-3">
+            <h3 className="font-bold text-sm text-rose-700">Permanent Account Deletion</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              <strong>Warning:</strong> Deleting your account is permanent:
+            </p>
+            <ul className="text-xs text-slate-600 list-disc list-inside space-y-1">
+              <li>All your saved addresses and profile info will be permanently purged.</li>
+              <li>Order receipts and warranty tracking will no longer be accessible.</li>
             </ul>
+
+            <div className="pt-4 flex gap-3">
+              <button
+                onClick={() => setActiveView('privacy')}
+                type="button"
+                className="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer"
+              >
+                Keep Account
+              </button>
+              <button
+                onClick={() => {
+                  handleActionToast('Account deletion initiated. Data will be purged.');
+                  setTimeout(() => {
+                    logout();
+                    navigate('/');
+                  }, 1200);
+                }}
+                type="button"
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+              >
+                Permanently Delete
+              </button>
+            </div>
           </div>
         </main>
 
@@ -746,25 +1215,6 @@ const Account = () => {
             <Headphones className="w-3.5 h-3.5 text-slate-700" />
             <span>Help</span>
           </Link>
-        </div>
-
-        {/* 2. SuperCoin / Privilege Card */}
-        <div className="bg-gradient-to-r from-blue-50/80 via-white to-purple-50/60 rounded-2xl border border-blue-100/80 p-4 shadow-2xs space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-700">
-              Your SuperCoin balance
-            </span>
-            <div className="flex items-center gap-1 bg-amber-100/90 text-amber-900 border border-amber-200/80 px-2.5 py-0.5 rounded-full text-xs font-black">
-              <span>⚡</span>
-              <span>0</span>
-            </div>
-          </div>
-          <div className="pt-1 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-            <span className="flex items-center gap-1.5 font-medium">
-              Extra SuperCoins and 40% OFF with <span className="font-bold text-[#1c2d4a]">APPZYS Club</span>
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          </div>
         </div>
 
         {/* 3. Top Action Buttons: Orders & Contact Us */}
@@ -889,21 +1339,6 @@ const Account = () => {
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </button>
-
-            {/* My Subscriptions */}
-            <button
-              onClick={() => setActiveView('subscriptions')}
-              type="button"
-              className="w-full px-4 py-3.5 flex items-center justify-between text-left hover:bg-slate-50 transition cursor-pointer"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-blue-50 text-[#1c2d4a] flex items-center justify-center">
-                  <Tv className="w-4 h-4" />
-                </div>
-                <span className="text-xs sm:text-sm font-semibold text-slate-800">My subscriptions</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-slate-400" />
-            </button>
           </div>
         </div>
 
@@ -951,25 +1386,14 @@ const Account = () => {
 
         {/* 7. Working Logout Button */}
         <div className="pt-2">
-          {user ? (
-            <button
-              onClick={handleLogout}
-              type="button"
-              className="w-full py-3.5 rounded-2xl border-2 border-rose-200 hover:border-rose-400 bg-rose-50/60 hover:bg-rose-100/70 text-rose-700 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-xs"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Log Out ({user.name})</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => setActiveView('edit-profile')}
-              type="button"
-              className="w-full py-3.5 rounded-2xl bg-[#1c2d4a] hover:bg-[#13223f] text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-md"
-            >
-              <User className="w-4 h-4" />
-              <span>Manage Profile & Details</span>
-            </button>
-          )}
+          <button
+            onClick={handleLogout}
+            type="button"
+            className="w-full py-3.5 rounded-2xl border-2 border-rose-200 hover:border-rose-300 bg-rose-50/70 hover:bg-rose-100/80 text-rose-700 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-xs"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Log Out{user?.name ? ` (${user.name})` : ''}</span>
+          </button>
         </div>
 
       </main>

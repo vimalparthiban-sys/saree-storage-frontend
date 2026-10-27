@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
@@ -10,7 +10,7 @@ import AuthModal from '../components/AuthModal';
 import SizeGuideModal from '../components/SizeGuideModal';
 import ProductDemoSection from '../components/ProductDemoSection';
 import NewsletterBanner from '../components/NewsletterBanner';
-import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, ChevronLeft, Minus, Plus, X, Maximize2, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, ChevronLeft, Minus, Plus, X, Maximize2, ShoppingBag, ArrowRight, ArrowLeft, Search } from 'lucide-react';
 
 const getRelativeDateString = (timestampOrDateStr) => {
   if (!timestampOrDateStr) return 'Just now';
@@ -44,9 +44,12 @@ const getRelativeDateString = (timestampOrDateStr) => {
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { addToCart, setIsCheckoutOpen, setIsSizeGuideOpen } = useCart();
+  const navigate = useNavigate();
+  const { cart, addToCart, removeProductFromCart, setIsCheckoutOpen, setIsSizeGuideOpen, totalItemCount, setIsCartOpen } = useCart();
+  const [mobileSearch, setMobileSearch] = useState('');
 
   const product = products.find((p) => p.id === id) || products[0];
+  const isProductInCart = Boolean(cart && cart.some((item) => item.id === product.id));
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -216,6 +219,33 @@ const ProductDetail = () => {
     });
   };
 
+  const handleToggleCart = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (isProductInCart) {
+      removeProductFromCart(product.id);
+      setReviewToast('Removed from cart');
+      setTimeout(() => setReviewToast(''), 2500);
+    } else {
+      addToCart({
+        id: product.id,
+        packId: `${product.id}-${currentPack.qty}-${selectedSize}`,
+        title: product.shortTitle || product.title,
+        packName: `Pack of ${currentPack.qty}`,
+        packQuantity: currentPack.qty,
+        size: selectedSize,
+        color: selectedColor,
+        price: currentPack.price,
+        originalPrice: currentPack.mrp,
+        quantity: quantity
+      }, false);
+      setReviewToast('✓ Added to cart');
+      setTimeout(() => setReviewToast(''), 2500);
+    }
+  };
+
   const handleBuyNow = () => {
     handleAddToCart();
     setIsCheckoutOpen(true);
@@ -223,7 +253,69 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden pb-20 md:pb-0">
-      <Navbar />
+      {/* Desktop Header */}
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+
+      {/* Mobile Top Navigation (Flipkart Style: Back Arrow + Search + Cart) */}
+      <header className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-3 py-2 flex items-center gap-2 shadow-2xs">
+        {/* Simple Click Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="p-1.5 -ml-1 text-slate-800 hover:bg-slate-100 rounded-full transition cursor-pointer active:scale-95 shrink-0"
+          aria-label="Back"
+          title="Back"
+        >
+          <ArrowLeft className="w-5 h-5 stroke-[2.3]" />
+        </button>
+
+        {/* Search Input */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (mobileSearch.trim()) {
+              navigate(`/?search=${encodeURIComponent(mobileSearch.trim())}`);
+            }
+          }}
+          className="flex-1 relative flex items-center min-w-0"
+        >
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 pointer-events-none" />
+          <input
+            type="text"
+            value={mobileSearch}
+            onChange={(e) => setMobileSearch(e.target.value)}
+            placeholder="Search products..."
+            className="w-full pl-8 pr-7 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-hidden focus:ring-1.5 focus:ring-[#1c2d4a]"
+          />
+          {mobileSearch && (
+            <button
+              type="button"
+              onClick={() => setMobileSearch('')}
+              className="absolute right-2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          )}
+        </form>
+
+        {/* Cart Button with Count Badge */}
+        <button
+          onClick={() => setIsCartOpen(true)}
+          type="button"
+          className="p-2 text-slate-800 hover:bg-slate-100 rounded-full transition relative cursor-pointer active:scale-95 shrink-0"
+          aria-label="Cart"
+          title="Cart"
+        >
+          <ShoppingBag className="w-5 h-5 stroke-[2]" />
+          {totalItemCount > 0 && (
+            <span className="absolute top-0.5 right-0.5 bg-amber-400 text-slate-950 font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+              {totalItemCount}
+            </span>
+          )}
+        </button>
+      </header>
 
       <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 w-full space-y-8 sm:space-y-12">
         
@@ -427,10 +519,15 @@ const ProductDetail = () => {
             {/* Primary Action Buttons */}
             <div className="space-y-2.5 pt-2">
               <button
-                onClick={handleAddToCart}
-                className="w-full py-3 sm:py-3.5 rounded-xl border-2 border-[#1c2d4a] hover:bg-[#1c2d4a] hover:text-white text-[#1c2d4a] font-bold text-xs sm:text-sm transition cursor-pointer shadow-xs active:scale-98"
+                onClick={handleToggleCart}
+                className={`w-full py-3 sm:py-3.5 rounded-xl border-2 font-bold text-xs sm:text-sm transition cursor-pointer shadow-xs active:scale-98 flex items-center justify-center gap-2 ${
+                  isProductInCart
+                    ? 'bg-[#1c2d4a] text-white border-[#1c2d4a] hover:bg-[#15233f]'
+                    : 'border-[#1c2d4a] hover:bg-[#1c2d4a] hover:text-white text-[#1c2d4a]'
+                }`}
               >
-                Add to cart
+                <ShoppingBag className={`w-4 h-4 ${isProductInCart ? 'fill-white' : ''}`} />
+                <span>{isProductInCart ? 'In Cart • Click to remove' : 'Add to cart'}</span>
               </button>
 
               <button
@@ -874,13 +971,22 @@ const ProductDetail = () => {
 
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={handleAddToCart}
+            onClick={handleToggleCart}
             type="button"
-            className="p-2.5 rounded-xl border border-slate-300 text-slate-700 hover:text-[#1c2d4a] hover:border-[#1c2d4a] transition cursor-pointer active:scale-95 bg-white shadow-xs"
-            aria-label="Add to Cart"
-            title="Add to cart"
+            className={`p-2.5 rounded-xl border-2 transition-all duration-200 cursor-pointer active:scale-95 relative flex items-center justify-center ${
+              isProductInCart
+                ? 'bg-[#1c2d4a] border-[#1c2d4a] text-white shadow-md'
+                : 'bg-white border-slate-300 text-slate-700 hover:text-[#1c2d4a] hover:border-[#1c2d4a] shadow-xs'
+            }`}
+            aria-label={isProductInCart ? "Remove from cart" : "Add to cart"}
+            title={isProductInCart ? "In cart (click to remove)" : "Add to cart"}
           >
-            <ShoppingBag className="w-5 h-5 stroke-[2]" />
+            <ShoppingBag className={`w-5 h-5 stroke-[2] transition-transform ${isProductInCart ? 'fill-white text-white scale-105' : 'fill-transparent'}`} />
+            {isProductInCart && (
+              <span className="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center text-[8px] font-black shadow-xs">
+                ✓
+              </span>
+            )}
           </button>
           
           <button

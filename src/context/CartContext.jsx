@@ -144,7 +144,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('saree_store_orders', JSON.stringify(orders));
   }, [orders]);
 
-  const addToCart = (product) => {
+  const addToCart = (product, openDrawer = true) => {
     setCart((prev) => {
       const existingIndex = prev.findIndex(
         (item) => item.id === product.id && item.packId === product.packId && item.color === product.color
@@ -156,11 +156,17 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-    setIsCartOpen(true);
+    if (openDrawer) {
+      setIsCartOpen(true);
+    }
   };
 
   const removeFromCart = (index) => {
     setCart((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeProductFromCart = (productId) => {
+    setCart((prev) => prev.filter((item) => item.id !== productId));
   };
 
   const updateQuantity = (index, delta) => {
@@ -328,6 +334,7 @@ export const CartProvider = ({ children }) => {
         cart,
         addToCart,
         removeFromCart,
+        removeProductFromCart,
         updateQuantity,
         clearCart,
         cartTotal,
