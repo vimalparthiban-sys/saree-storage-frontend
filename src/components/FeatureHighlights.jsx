@@ -40,7 +40,7 @@ const FeatureHighlights = () => {
         </div>
 
         {/* Horizontal scroll on mobile (Flipkart app style), Grid on desktop */}
-        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 overflow-x-auto md:overflow-visible gap-3.5 sm:gap-6 pb-2 px-4 -mx-4 md:px-0 md:mx-0 snap-x snap-mandatory no-scrollbar touch-pan-x">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 overflow-x-auto md:overflow-visible gap-3.5 sm:gap-6 pb-2 px-4 -mx-4 md:px-0 md:mx-0 snap-x no-scrollbar overscroll-x-contain">
           {features.map((f, i) => (
             <div
               key={i}

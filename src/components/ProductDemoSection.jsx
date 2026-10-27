@@ -77,7 +77,7 @@ const ProductDemoSection = ({ product }) => {
         </div>
 
         {/* Step Buttons (Swipe horizontally on mobile, 3-col grid on desktop) */}
-        <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-3 sm:gap-4 mb-6 sm:mb-8 pb-2 px-1 snap-x snap-mandatory no-scrollbar touch-pan-x">
+        <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-3 sm:gap-4 mb-6 sm:mb-8 pb-2 px-1 snap-x no-scrollbar overscroll-x-contain">
           {demo.steps.map((s) => (
             <button
               key={s.step}

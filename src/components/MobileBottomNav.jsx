@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { Home as HomeIcon, LayoutGrid, User, ShoppingBag, X, ChevronRight, Layers, Sparkles } from 'lucide-react';
+import { Home as HomeIcon, LayoutGrid, User, ShoppingBag, X, ChevronRight, Layers, Sparkles, Truck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
 
@@ -14,6 +14,7 @@ const MobileBottomNav = () => {
   const currentCategory = searchParams.get('category');
   const isHome = location.pathname === '/' && !currentCategory && !isCategoryDrawerOpen;
   const isAccount = (location.pathname === '/account' || location.pathname === '/profile') && !isCategoryDrawerOpen;
+  const isTrack = location.pathname === '/track-order' && !isCategoryDrawerOpen;
 
   const handleSelectCategory = (categorySlug) => {
     setIsCategoryDrawerOpen(false);
@@ -31,17 +32,17 @@ const MobileBottomNav = () => {
 
   return (
     <>
-      {/* Mobile Bottom Navigation Bar (Flipkart App Layout: Home | Categories | Account | Cart) */}
+      {/* Mobile Bottom Navigation Bar: Home | Categories | Track | Account | Cart */}
       <nav 
         aria-label="Mobile Bottom Navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/98 backdrop-blur-md border-t border-slate-200 py-1.5 px-3 flex items-center justify-around shadow-2xl select-none"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/98 backdrop-blur-md border-t border-slate-200 py-1 px-1.5 flex items-center justify-around shadow-2xl select-none"
         style={{ paddingBottom: 'max(0.375rem, env(safe-area-inset-bottom))' }}
       >
         {/* 1. Home */}
         <Link
           to="/"
           onClick={() => setIsCategoryDrawerOpen(false)}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition ${
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition ${
             isHome ? 'text-[#1c2d4a] font-bold' : 'text-slate-500 hover:text-slate-900 font-medium'
           }`}
         >
@@ -53,7 +54,7 @@ const MobileBottomNav = () => {
         <button
           onClick={() => setIsCategoryDrawerOpen(true)}
           type="button"
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition cursor-pointer ${
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition cursor-pointer ${
             isCategoryDrawerOpen ? 'text-[#1c2d4a] font-bold' : 'text-slate-500 hover:text-slate-900 font-medium'
           }`}
         >
@@ -61,11 +62,23 @@ const MobileBottomNav = () => {
           <span className="text-[10px] mt-0.5">Categories</span>
         </button>
 
-        {/* 3. Account (Flipkart User icon) */}
+        {/* 3. Track Order */}
+        <Link
+          to="/track-order"
+          onClick={() => setIsCategoryDrawerOpen(false)}
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition ${
+            isTrack ? 'text-[#1c2d4a] font-bold' : 'text-slate-500 hover:text-slate-900 font-medium'
+          }`}
+        >
+          <Truck className={`w-5 h-5 ${isTrack ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+          <span className="text-[10px] mt-0.5">Track</span>
+        </Link>
+
+        {/* 4. Account (Flipkart User icon) */}
         <Link
           to="/account"
           onClick={() => setIsCategoryDrawerOpen(false)}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition ${
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition ${
             isAccount ? 'text-[#1c2d4a] font-bold' : 'text-slate-500 hover:text-slate-900 font-medium'
           }`}
         >
@@ -73,14 +86,14 @@ const MobileBottomNav = () => {
           <span className="text-[10px] mt-0.5">Account</span>
         </Link>
 
-        {/* 4. Cart with Live Item Badge */}
+        {/* 5. Cart with Live Item Badge */}
         <button
           onClick={() => {
             setIsCategoryDrawerOpen(false);
             setIsCartOpen(true);
           }}
           type="button"
-          className="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-slate-700 hover:text-[#1c2d4a] transition cursor-pointer relative"
+          className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-700 hover:text-[#1c2d4a] transition cursor-pointer relative"
         >
           <div className="relative">
             <ShoppingBag className="w-5 h-5 stroke-[1.8]" />

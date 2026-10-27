@@ -41,7 +41,7 @@ const ProductCardImage = ({ product }) => {
 
   return (
     <div
-      className="relative aspect-4/3 sm:aspect-square w-full p-3 sm:p-4.5 flex items-center justify-center select-none"
+      className="relative aspect-square w-full p-3 sm:p-4.5 flex items-center justify-center select-none shrink-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -322,7 +322,7 @@ const Home = () => {
         </div>
 
         {/* 3. Product Catalog: Left-to-Right Horizontal Swipe on Mobile (Flipkart style), Grid on Desktop */}
-        <div className="flex md:grid md:grid-cols-2 max-w-4xl mx-auto overflow-x-auto md:overflow-visible gap-4 md:gap-8 pb-4 pt-1 px-4 -mx-4 md:px-0 md:mx-auto snap-x snap-mandatory no-scrollbar touch-pan-x">
+        <div className="flex md:grid md:grid-cols-2 max-w-4xl mx-auto overflow-x-auto md:overflow-visible gap-4 md:gap-8 pb-4 pt-1 px-4 -mx-4 md:px-0 md:mx-auto snap-x no-scrollbar overscroll-x-contain">
           {filteredProducts.map((p) => (
             <Link
               key={p.id}
@@ -344,7 +344,7 @@ const Home = () => {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#1c2d4a] transition line-clamp-2">
+                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#1c2d4a] transition line-clamp-2 min-h-[36px] sm:min-h-[40px]">
                     {p.cardTitle || p.title}
                   </h3>
                 </div>

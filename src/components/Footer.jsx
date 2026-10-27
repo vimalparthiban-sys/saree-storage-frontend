@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* 3 Pillars of Trust (Horizontal scroll on mobile, 3-col on desktop) */}
-        <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-3.5 md:gap-6 pb-6 md:pb-12 border-b border-[#1c2d4a] px-4 -mx-4 md:px-0 md:mx-0 snap-x snap-mandatory no-scrollbar touch-pan-x">
+        <div className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-3.5 md:gap-6 pb-6 md:pb-12 border-b border-[#1c2d4a] px-4 -mx-4 md:px-0 md:mx-0 snap-x no-scrollbar overscroll-x-contain">
           <div className="w-[78vw] sm:w-[300px] md:w-auto shrink-0 md:shrink snap-center md:snap-align-none flex items-center gap-3.5 bg-[#1c2d4a]/50 p-3.5 sm:p-4 rounded-2xl border border-[#2a4066]/50">
             <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
               <Truck className="w-5 h-5 sm:w-6 sm:h-6" />
