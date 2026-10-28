@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
 
 const CartContext = createContext();
 
@@ -13,123 +14,14 @@ export const CartProvider = ({ children }) => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Ensure every order has a completely unique AWB and courier assigned
-          const seenAwbs = new Set();
-          return parsed.map((ord, idx) => {
-            let awb = ord.awb;
-            if (!awb || seenAwbs.has(awb)) {
-              awb = 'AWB-DEL-' + (idx === 0 ? '982140' : Math.floor(100000 + Math.random() * 900000));
-            }
-            seenAwbs.add(awb);
-            return {
-              ...ord,
-              awb,
-              courier: ord.courier || (idx % 2 === 0 ? 'Delhivery Express' : 'Bluedart Priority')
-            };
-          });
+        if (Array.isArray(parsed)) {
+          return parsed;
         }
       } catch (e) {
         console.error('Failed to parse orders:', e);
       }
     }
-    return [
-      {
-        id: 'ORD-2026-9686',
-        awb: 'AWB-DEL-982140',
-        courier: 'Delhivery Express',
-        customerName: 'Vimal P',
-        phone: '9840012345',
-        address: 'No. 12, Anna Nagar West, Chennai, Tamil Nadu - 600040',
-        paymentMethod: 'UPI',
-        paymentStatus: 'PAID',
-        items: [
-          {
-            title: 'APPZYS 60L Saree Organiser',
-            packName: 'Pack of 2 (Most Popular)',
-            color: 'Classic Grey Diamond',
-            quantity: 1,
-            price: 899
-          }
-        ],
-        totalAmount: 899,
-        status: 'CONFIRMED', // 'CONFIRMED', 'PACKED', 'SHIPPED', 'OUT_FOR_DELIVERY', 'DELIVERED', 'DELAYED'
-        createdAt: '2026-10-22T10:30:00',
-        trackingEvents: [
-          {
-            status: 'CONFIRMED',
-            title: 'Order Confirmed & Payment Verified',
-            time: '10:30 AM, Today',
-            location: 'APPZYS Central Payment Gateway',
-            done: true
-          }
-        ],
-        whatsappLogs: [
-          {
-            stage: 'ORDER_PLACED',
-            time: '10:30 AM',
-            message: 'Namaste Vimal P! 🥻 Your APPZYS order #ORD-2026-9686 (Total: ₹899) is confirmed! We are preparing your Stainless Steel Frame Saree Organiser. Track live: https://appzys.com/track-order?awb=AWB-DEL-982140. Support: +91 98400 12345.'
-          }
-        ]
-      },
-      {
-        id: 'ORD-2026-8910',
-        awb: 'AWB-BLU-452199',
-        courier: 'Bluedart Priority',
-        customerName: 'Priya Sundaram',
-        phone: '9840123456',
-        address: 'Plot 44, Gandhi Nagar, Adyar, Chennai - 600020',
-        paymentMethod: 'UPI',
-        paymentStatus: 'PAID',
-        items: [
-          {
-            title: 'APPZYS Luxury Jewellery Organiser',
-            packName: 'Pack of 1 Box',
-            color: 'Emerald Green',
-            quantity: 1,
-            price: 699
-          }
-        ],
-        totalAmount: 699,
-        status: 'SHIPPED',
-        createdAt: '2026-10-21T10:15:00',
-        trackingEvents: [
-          {
-            status: 'CONFIRMED',
-            title: 'Order Confirmed & Payment Received',
-            time: '10:15 AM, 21 Oct',
-            location: 'Online Gateway',
-            done: true
-          },
-          {
-            status: 'PACKED',
-            title: 'Double Bubble Cushioning & Velvet Box Sealed',
-            time: '01:45 PM, 21 Oct',
-            location: 'APPZYS Warehouse, Chennai',
-            done: true
-          },
-          {
-            status: 'SHIPPED',
-            title: 'Handed Over to Bluedart Courier Agent (AWB: AWB-BLU-452199)',
-            time: '05:30 PM, 21 Oct',
-            location: 'Guindy Sorting Hub, Chennai',
-            done: true
-          }
-        ],
-        whatsappLogs: [
-          {
-            stage: 'ORDER_PLACED',
-            time: '10:15 AM, 21 Oct',
-            message: 'Namaste Priya Sundaram! 💍 Your APPZYS order #ORD-2026-8910 (Total: ₹699) is confirmed! We are preparing your Luxury Jewellery Organiser.'
-          },
-          {
-            stage: 'DISPATCHED',
-            time: '05:35 PM, 21 Oct',
-            message: '📦 Dispatched! Your parcel is in transit via Bluedart (AWB: AWB-BLU-452199). Expected delivery in 1-2 days. Track: https://appzys.com/track-order?awb=AWB-BLU-452199'
-          }
-        ]
-      }
-    ];
+    return [];
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -217,6 +109,28 @@ export const CartProvider = ({ children }) => {
     };
 
     setOrders((prev) => [newOrder, ...prev]);
+
+    // Send real order to Spring Boot + MySQL Backend
+    api.createOrder({
+      customerName: orderData.customerName || 'Customer',
+      phone: orderData.phone || '9840012345',
+      address: orderData.address || 'Chennai, Tamil Nadu',
+      totalAmount: orderData.totalAmount || cartTotal,
+      paymentMethod: orderData.paymentMethod || 'UPI',
+      items: cart.map((item) => ({
+        productId: item.id,
+        title: item.title,
+        packName: item.packName || 'Pack of 1',
+        color: item.color || 'Standard',
+        quantity: item.quantity || 1,
+        price: item.price || 499
+      }))
+    }).then((res) => {
+      console.log('✅ Real order persisted in MySQL via Spring Boot:', res);
+    }).catch((err) => {
+      console.warn('Backend unavailable, order kept in localStorage fallback:', err);
+    });
+
     clearCart();
     setIsCheckoutOpen(false);
     return newOrder;

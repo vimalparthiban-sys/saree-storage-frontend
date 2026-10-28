@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
+import { getProductReviews } from '../data/reviewsData';
 import { useCart } from '../context/CartContext';
+import api from '../services/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CartDrawer from '../components/CartDrawer';
@@ -10,7 +12,7 @@ import AuthModal from '../components/AuthModal';
 import SizeGuideModal from '../components/SizeGuideModal';
 import ProductDemoSection from '../components/ProductDemoSection';
 import NewsletterBanner from '../components/NewsletterBanner';
-import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, ChevronLeft, Minus, Plus, X, Maximize2, ShoppingBag, ArrowRight, ArrowLeft, Search } from 'lucide-react';
+import { Star, ShieldCheck, Truck, RotateCcw, CheckCircle2, ChevronRight, ChevronLeft, Minus, Plus, X, Maximize2, ShoppingBag, ArrowRight, ArrowLeft, Search, PlayCircle, FileText, Sparkles } from 'lucide-react';
 
 const getRelativeDateString = (timestampOrDateStr) => {
   if (!timestampOrDateStr) return 'Just now';
@@ -58,40 +60,121 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState(product.colors[0].name);
   const [quantity, setQuantity] = useState(1);
 
-  // Reviews State & LocalStorage Persistence
+  // Active color images (switches gallery dynamically when a color is clicked!)
+  const activeColorObj = product.colors?.find((c) => c.name === selectedColor);
+  const currentImages = (activeColorObj && activeColorObj.images && activeColorObj.images.length > 0)
+    ? activeColorObj.images
+    : product.images;
+
+  // 5 reviews per page pagination state (Google style)
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+
+  // Reviews State & LocalStorage Persistence (Loads full 99 authentic reviews)
   const [reviewsList, setReviewsList] = useState(() => {
+    const baseReviews = getProductReviews(product.id);
     try {
       const saved = localStorage.getItem(`reviews_${product.id}`);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return [...parsed, ...(product.reviews || [])];
+          return [...parsed, ...baseReviews];
         }
       }
     } catch (err) {
       console.error('Error loading reviews from localStorage:', err);
     }
-    return product.reviews || [];
+    return baseReviews;
   });
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(`reviews_${product.id}`);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setReviewsList([...parsed, ...(product.reviews || [])]);
-          return;
+    let isMounted = true;
+    setCurrentPage(1);
+
+    // Fetch live verified reviews from Spring Boot + MySQL
+    api.getReviews(product.id, 1, 100)
+      .then((res) => {
+        if (isMounted && res.success && res.data && res.data.reviews && res.data.reviews.length > 0) {
+          setReviewsList(res.data.reviews);
         }
-      }
-    } catch (err) {
-      console.error('Error loading reviews from localStorage:', err);
-    }
-    setReviewsList(product.reviews || []);
+      })
+      .catch(() => {
+        // Fallback to local reviews if backend is not reachable
+        const baseReviews = getProductReviews(product.id);
+        try {
+          const saved = localStorage.getItem(`reviews_${product.id}`);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              if (isMounted) setReviewsList([...parsed, ...baseReviews]);
+              return;
+            }
+          }
+        } catch (err) {
+          console.error('Error loading reviews from localStorage:', err);
+        }
+        if (isMounted) setReviewsList(baseReviews);
+      });
+
+    return () => { isMounted = false; };
   }, [product.id]);
 
-  const userSubmittedCount = Math.max(0, reviewsList.length - (product.reviews?.length || 0));
-  const totalReviewCount = (product.reviewCount || 97) + userSubmittedCount;
+  const totalReviewCount = reviewsList.length;
+  const totalPages = Math.ceil(reviewsList.length / reviewsPerPage);
+  const currentReviews = reviewsList.slice(
+    (currentPage - 1) * reviewsPerPage,
+    currentPage * reviewsPerPage
+  );
+
+  const getPaginationNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (currentPage <= 4) {
+      return [1, 2, 3, 4, '...', totalPages];
+    }
+    if (currentPage >= totalPages - 3) {
+      return [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+  };
+
+  // In-Page Jump Tabs State & Scroll Spy (Option 3: Specs, Demo, Reviews)
+  const [activeSection, setActiveSection] = useState('specs');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const isMobile = window.innerWidth < 768;
+      const offset = isMobile ? 120 : 200;
+      
+      const specsEl = document.getElementById('specs-section');
+      const demoEl = document.getElementById('demo-section');
+      const reviewsEl = document.getElementById('reviews-section');
+
+      if (reviewsEl && scrollY + offset >= reviewsEl.offsetTop) {
+        setActiveSection('reviews');
+      } else if (demoEl && scrollY + offset >= demoEl.offsetTop) {
+        setActiveSection('demo');
+      } else if (specsEl && scrollY + offset >= specsEl.offsetTop) {
+        setActiveSection('specs');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleJumpToSection = (sectionId, key) => {
+    setActiveSection(key);
+    const el = document.getElementById(sectionId);
+    if (el) {
+      const isMobile = window.innerWidth < 768;
+      const yOffset = isMobile ? -65 : -130;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
 
   // Review Modal Form State
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -121,6 +204,21 @@ const ProductDetail = () => {
 
     const updated = [newRev, ...reviewsList];
     setReviewsList(updated);
+    setCurrentPage(1);
+
+    // Persist to MySQL via Spring Boot REST API
+    api.createReview({
+      productId: product.id,
+      name: newRev.name,
+      city: newRev.city,
+      rating: newRev.rating,
+      title: newRev.title,
+      comment: newRev.comment
+    }).then((res) => {
+      console.log('✅ Review saved to MySQL via Spring Boot:', res);
+    }).catch((err) => {
+      console.warn('Backend offline, review saved to localStorage fallback:', err);
+    });
 
     try {
       const existingSaved = JSON.parse(localStorage.getItem(`reviews_${product.id}`) || '[]');
@@ -157,7 +255,7 @@ const ProductDetail = () => {
   };
 
   const handleNextImage = () => {
-    setSelectedImageIndex((prev) => (prev < product.images.length - 1 ? prev + 1 : prev));
+    setSelectedImageIndex((prev) => (prev < currentImages.length - 1 ? prev + 1 : prev));
   };
 
   // Track recently viewed products in localStorage for Flipkart-style Account page
@@ -202,13 +300,14 @@ const ProductDetail = () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isLightboxOpen, product.images.length]);
+  }, [isLightboxOpen, currentImages.length]);
 
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
       packId: `${product.id}-${currentPack.qty}-${selectedSize}`,
       title: product.shortTitle || product.title,
+      image: currentImages[0] || product.images?.[0],
       packName: `Pack of ${currentPack.qty}`,
       packQuantity: currentPack.qty,
       size: selectedSize,
@@ -233,6 +332,7 @@ const ProductDetail = () => {
         id: product.id,
         packId: `${product.id}-${currentPack.qty}-${selectedSize}`,
         title: product.shortTitle || product.title,
+        image: currentImages[0] || product.images?.[0],
         packName: `Pack of ${currentPack.qty}`,
         packQuantity: currentPack.qty,
         size: selectedSize,
@@ -339,7 +439,7 @@ const ProductDetail = () => {
               title="Click to view full screen"
             >
               <img
-                src={product.images[selectedImageIndex]}
+                src={currentImages[selectedImageIndex] || currentImages[0]}
                 alt={product.title}
                 className="w-full h-full object-contain rounded-xl sm:rounded-2xl transition-all duration-300 group-hover:scale-102"
               />
@@ -356,7 +456,7 @@ const ProductDetail = () => {
 
             {/* Thumbnail Switcher (Selected Blue Border) */}
             <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-none">
-              {product.images.map((img, idx) => (
+              {currentImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImageIndex(idx)}
@@ -476,14 +576,24 @@ const ProductDetail = () => {
                 {product.colors.map((c) => (
                   <button
                     key={c.name}
-                    onClick={() => setSelectedColor(c.name)}
+                    onClick={() => {
+                      setSelectedColor(c.name);
+                      setSelectedImageIndex(0);
+                    }}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs transition cursor-pointer ${
                       selectedColor === c.name
-                        ? 'border-[#1c2d4a] bg-blue-50/50 text-[#1c2d4a] font-bold'
+                        ? 'border-[#1c2d4a] bg-blue-50/60 text-[#1c2d4a] font-bold shadow-xs ring-1 ring-[#1c2d4a]/20'
                         : 'border-slate-200 hover:border-slate-300 text-slate-600'
                     }`}
                   >
-                    <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: c.hex }}></span>
+                    <span 
+                      className="w-3.5 h-3.5 rounded-full shrink-0 border border-slate-300 shadow-2xs" 
+                      style={{ 
+                        background: c.name.includes('Houndstooth') 
+                          ? 'repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 6px 6px' 
+                          : c.hex 
+                      }}
+                    ></span>
                     <span className="truncate">{c.name}</span>
                   </button>
                 ))}
@@ -562,8 +672,62 @@ const ProductDetail = () => {
 
         </div>
 
+        {/* Sticky In-Page Jump Tabs (Option 3: Demo, Reviews, Specs) */}
+        <div className="sticky top-[48px] md:top-[108px] z-30 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-xs py-1.5 px-2 sm:px-4">
+          <nav aria-label="In-page jump navigation" className="flex items-center justify-between sm:justify-start sm:gap-6 overflow-x-auto no-scrollbar">
+            <button
+              type="button"
+              onClick={() => handleJumpToSection('specs-section', 'specs')}
+              className={`py-2 px-3 rounded-xl flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm transition cursor-pointer active:scale-95 whitespace-nowrap ${
+                activeSection === 'specs'
+                  ? 'bg-[#1c2d4a] text-white font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 font-medium'
+              }`}
+            >
+              <FileText className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${activeSection === 'specs' ? 'text-white' : 'text-slate-500'}`} />
+              <span>Specs</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleJumpToSection('demo-section', 'demo')}
+              className={`py-2 px-3 rounded-xl flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm transition cursor-pointer active:scale-95 whitespace-nowrap ${
+                activeSection === 'demo'
+                  ? 'bg-[#1c2d4a] text-white font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 font-medium'
+              }`}
+            >
+              <PlayCircle className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${activeSection === 'demo' ? 'text-white' : 'text-rose-500'}`} />
+              <span>3-Sec Demo</span>
+              <span className={`text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-wider ${
+                activeSection === 'demo' ? 'bg-white/20 text-white' : 'bg-rose-50 text-rose-600 border border-rose-200'
+              }`}>
+                Video
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleJumpToSection('reviews-section', 'reviews')}
+              className={`py-2 px-3 rounded-xl flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm transition cursor-pointer active:scale-95 whitespace-nowrap ${
+                activeSection === 'reviews'
+                  ? 'bg-[#1c2d4a] text-white font-bold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 font-medium'
+              }`}
+            >
+              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400 text-amber-400" />
+              <span>Reviews</span>
+              <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${
+                activeSection === 'reviews' ? 'bg-white/20 text-white' : 'bg-blue-50 text-[#1c2d4a]'
+              }`}>
+                {totalReviewCount}
+              </span>
+            </button>
+          </nav>
+        </div>
+
         {/* Product Description & Key Features */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 border border-slate-200 shadow-xs space-y-4 sm:space-y-6">
+        <div id="specs-section" className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 border border-slate-200 shadow-xs space-y-4 sm:space-y-6 scroll-mt-24 sm:scroll-mt-36">
           <div className="border-b border-slate-200 pb-3">
             <h2 className="text-lg sm:text-xl font-serif font-bold text-slate-900">Product Description & Features</h2>
           </div>
@@ -584,10 +748,12 @@ const ProductDetail = () => {
         </div>
 
         {/* Dynamic 3-Step Demo & Comparison for this specific product */}
-        <ProductDemoSection product={product} />
+        <div id="demo-section" className="scroll-mt-24 sm:scroll-mt-36">
+          <ProductDemoSection product={product} />
+        </div>
 
         {/* Customer Reviews Section */}
-        <div id="reviews-section" className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 border border-slate-200 shadow-xs space-y-6">
+        <div id="reviews-section" className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 border border-slate-200 shadow-xs space-y-6 scroll-mt-24 sm:scroll-mt-36">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4">
             <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <div>
@@ -630,8 +796,9 @@ const ProductDetail = () => {
             </div>
           </div>
 
+          {/* Reviews Grid (5 per page) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {reviewsList.map((r, i) => (
+            {currentReviews.map((r, i) => (
               <div key={i} className="p-4 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
                 <div className="flex justify-between items-center text-xs">
                   <div className="flex text-amber-500">
@@ -652,6 +819,91 @@ const ProductDetail = () => {
               </div>
             ))}
           </div>
+
+          {/* Google Style Reviews Pagination (Matching User Screenshot: < 1 2 3 4 ... 20 >) */}
+          {totalPages > 1 && (
+            <div className="pt-6 border-t border-slate-200 flex flex-col items-center gap-2.5">
+              <nav aria-label="Reviews pagination" className="flex items-center justify-center gap-1 sm:gap-2 select-none">
+                {/* Previous Page Button (<) */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (currentPage > 1) {
+                      setCurrentPage((p) => p - 1);
+                      document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                  }}
+                  disabled={currentPage === 1}
+                  className={`p-2 rounded-full transition flex items-center justify-center ${
+                    currentPage === 1
+                      ? 'text-slate-300 cursor-not-allowed'
+                      : 'text-slate-700 hover:bg-slate-100 cursor-pointer active:scale-95'
+                  }`}
+                  aria-label="Previous Page"
+                  title="Previous page"
+                >
+                  <ChevronLeft className="w-5 h-5 stroke-[2]" />
+                </button>
+
+                {/* Page Number Circles & Ellipsis */}
+                {getPaginationNumbers().map((item, idx) => {
+                  if (item === '...') {
+                    return (
+                      <span key={`dots-${idx}`} className="w-8 h-8 flex items-center justify-center text-slate-400 text-sm font-semibold select-none">
+                        ...
+                      </span>
+                    );
+                  }
+
+                  const isActive = currentPage === item;
+                  return (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => {
+                        setCurrentPage(item);
+                        document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }}
+                      className={`w-9 h-9 rounded-full text-xs sm:text-sm font-bold transition flex items-center justify-center cursor-pointer active:scale-95 ${
+                        isActive
+                          ? 'bg-[#1c2d4a] text-white shadow-xs'
+                          : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                      }`}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {item}
+                    </button>
+                  );
+                })}
+
+                {/* Next Page Button (>) */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (currentPage < totalPages) {
+                      setCurrentPage((p) => p + 1);
+                      document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                  }}
+                  disabled={currentPage === totalPages}
+                  className={`p-2 rounded-full transition flex items-center justify-center ${
+                    currentPage === totalPages
+                      ? 'text-slate-300 cursor-not-allowed'
+                      : 'text-slate-700 hover:bg-slate-100 cursor-pointer active:scale-95'
+                  }`}
+                  aria-label="Next Page"
+                  title="Next page"
+                >
+                  <ChevronRight className="w-5 h-5 stroke-[2]" />
+                </button>
+              </nav>
+
+              {/* Subtitle / Counter info */}
+              <span className="text-[11px] font-medium text-slate-400">
+                Showing {((currentPage - 1) * reviewsPerPage) + 1}–{Math.min(currentPage * reviewsPerPage, totalReviewCount)} of {totalReviewCount} verified customer reviews
+              </span>
+            </div>
+          )}
         </div>
 
       </main>
@@ -698,14 +950,14 @@ const ProductDetail = () => {
           {/* Center Stage: Fullscreen Clean Image */}
           <div className="w-full h-full flex items-center justify-center p-4 sm:p-10">
             <img
-              src={product.images[selectedImageIndex]}
+              src={currentImages[selectedImageIndex] || currentImages[0]}
               alt={`${product.title} - view ${selectedImageIndex + 1}`}
               className="max-w-[88vw] max-h-[82vh] sm:max-h-[86vh] w-auto h-auto object-contain select-none"
             />
           </div>
 
           {/* Forward / Next Arrow Button */}
-          {selectedImageIndex < product.images.length - 1 && (
+          {selectedImageIndex < currentImages.length - 1 && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -721,7 +973,7 @@ const ProductDetail = () => {
 
           {/* Bottom: Dots Indicator ONLY (No thumbnails) */}
           <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2">
-            {product.images.map((_, idx) => (
+            {currentImages.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setSelectedImageIndex(idx)}

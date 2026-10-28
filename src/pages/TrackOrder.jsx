@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import { useCart } from '../context/CartContext';
+import api from '../services/api';
 import {
   CheckCircle2,
   Headphones,
@@ -48,7 +49,20 @@ const TrackOrder = () => {
         (o.awb && o.awb.toLowerCase() === clean) ||
         (o.phone && o.phone.includes(clean))
     );
-    setTrackedOrder(found || null);
+    if (found) {
+      setTrackedOrder(found);
+    } else {
+      setTrackedOrder(null);
+    }
+
+    // Query live tracking from Spring Boot Backend
+    api.getOrderByAwb(clean.toUpperCase())
+      .then((res) => {
+        if (res.success && res.data) {
+          setTrackedOrder(res.data);
+        }
+      })
+      .catch(() => {});
   };
 
   const handleTrackSubmit = (e) => {

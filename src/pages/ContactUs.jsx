@@ -42,14 +42,28 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+              <div className="flex items-start gap-3 p-3.5 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl">
+                <div className="w-10 h-10 rounded-xl bg-[#25D366] text-white flex items-center justify-center shrink-0 shadow-sm">
                   <MessageCircle className="w-5 h-5" />
                 </div>
-                <div>
-                  <span className="font-bold text-slate-900 block">WhatsApp Chat</span>
-                  <span className="text-slate-500">+91 8510042020</span>
-                  <span className="text-[10px] text-emerald-700 block mt-0.5">Instant live chat available</span>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 block">WhatsApp Instant Support</span>
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">100% Free</span>
+                  </div>
+                  <span className="text-slate-700 block mt-0.5 font-medium">+91 8072784165</span>
+                  <p className="text-[11px] text-slate-600 mt-1 leading-snug">
+                    Need instant answers about saree covers or order status? Click below to chat directly with us on WhatsApp.
+                  </p>
+                  <a
+                    href="https://wa.me/918072784165?text=Hi%20APPZYS%20Store,%20I%20have%20an%20enquiry%20regarding%20your%20products."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-2.5 px-3.5 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat With Us on WhatsApp</span>
+                  </a>
                 </div>
               </div>
 

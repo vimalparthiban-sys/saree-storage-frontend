@@ -32,22 +32,33 @@ import {
 } from 'lucide-react';
 
 const Account = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, openAuth } = useAuth();
   const { totalItemCount, setIsCartOpen } = useCart();
   const navigate = useNavigate();
 
-  // Active sub-page view: 'main' | 'edit-profile' | 'addresses' | 'notifications' | 'subscriptions' | 'privacy' | 'devices'
+  // Active sub-page view: 'main' | 'edit-profile' | 'addresses' | 'notifications' | 'privacy' | 'devices'
   const [activeView, setActiveView] = useState('main');
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [toastMessage, setToastMessage] = useState('');
 
   // 1. Edit Profile State
   const [profileForm, setProfileForm] = useState({
-    name: user?.name || 'Vimal',
-    email: user?.email || 'vimal@appzys.com',
-    phone: '98400 12345',
-    gender: 'Male'
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    gender: user?.gender || 'Not Specified'
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfileForm({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        gender: user.gender || 'Not Specified'
+      });
+    }
+  }, [user]);
 
   // 2. Saved Addresses State
   const [addresses, setAddresses] = useState([
@@ -1197,14 +1208,22 @@ const Account = () => {
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 w-full space-y-6">
         
-        {/* 1. Header Row (Hey, Vimal + Help Button) */}
+        {/* 1. Header Row (Hey, Name + Help Button) */}
         <div className="flex items-center justify-between pt-2">
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
-              Hey, {displayName}
+              {user?.name ? `Hey, ${user.name.split(' ')[0]}` : 'Welcome to APPZYS'}
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              {user?.email || 'Welcome to your APPZYS account'}
+              {user?.email || (
+                <button
+                  type="button"
+                  onClick={() => openAuth('login')}
+                  className="text-[#1c2d4a] font-bold underline cursor-pointer"
+                >
+                  Sign in or Create Account
+                </button>
+              )}
             </p>
           </div>
 
@@ -1384,16 +1403,27 @@ const Account = () => {
           </div>
         </div>
 
-        {/* 7. Working Logout Button */}
+        {/* 7. Working Login / Logout Button */}
         <div className="pt-2">
-          <button
-            onClick={handleLogout}
-            type="button"
-            className="w-full py-3.5 rounded-2xl border-2 border-rose-200 hover:border-rose-300 bg-rose-50/70 hover:bg-rose-100/80 text-rose-700 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-xs"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Log Out{user?.name ? ` (${user.name})` : ''}</span>
-          </button>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              type="button"
+              className="w-full py-3.5 rounded-2xl border-2 border-rose-200 hover:border-rose-300 bg-rose-50/70 hover:bg-rose-100/80 text-rose-700 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-xs"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Log Out ({user.name})</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => openAuth('login')}
+              type="button"
+              className="w-full py-3.5 rounded-2xl bg-[#1c2d4a] hover:bg-[#142239] text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-98 shadow-md"
+            >
+              <User className="w-4 h-4" />
+              <span>Sign In / Create Account</span>
+            </button>
+          )}
         </div>
 
       </main>

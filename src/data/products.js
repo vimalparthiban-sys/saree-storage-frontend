@@ -8,7 +8,7 @@ export const products = [
     category: 'Wardrobe Organizers',
     categorySlug: 'saree-organiser',
     rating: 4.9,
-    reviewCount: 97,
+    reviewCount: 99,
     inStock: true,
     basePrice: 499,
     mrp: 799,
@@ -16,18 +16,56 @@ export const products = [
     specs: '50 x 40 x 30 cm (Length x Width x Height) • 60 Liters Capacity',
     perfectFor: ['Sarees & Traditional Wear', 'Clothes & Accessories', 'Blankets & Seasonal Storage'],
     images: [
-      '/images/saree-organiser-1.jpg',
-      '/images/saree-organiser-steel-frame.jpg',
-      '/images/saree-organiser-dimensions.jpg',
-      '/images/saree-organiser-before-after.jpg',
-      '/images/saree-organiser-features.jpg'
+      '/images/saree-organiser-navy-1.jpg',
+      '/images/saree-organiser-navy-2.jpg',
+      '/images/saree-organiser-navy-3.jpg',
+      '/images/saree-organiser-navy-4.jpg',
+      '/images/saree-organiser-navy-5.jpg'
     ],
     sizes: ['60 Liters (50 x 40 x 30 cm - 15 to 18 Sarees)'],
     colors: [
-      { name: 'Navy Blue Polka Dot', hex: '#1e3a8a' },
-      { name: 'Royal Maroon Polka', hex: '#881337' },
-      { name: 'Coffee Brown', hex: '#451a03' },
-      { name: 'Charcoal Grey', hex: '#334155' }
+      { 
+        name: 'Navy Blue Polka Dot', 
+        hex: '#1e3a8a',
+        images: [
+          '/images/saree-organiser-navy-1.jpg',
+          '/images/saree-organiser-navy-2.jpg',
+          '/images/saree-organiser-navy-3.jpg',
+          '/images/saree-organiser-navy-4.jpg',
+          '/images/saree-organiser-navy-5.jpg'
+        ]
+      },
+      { 
+        name: 'Black & White Houndstooth', 
+        hex: '#111827',
+        images: [
+          '/images/saree-organiser-houndstooth-1.jpg',
+          '/images/saree-organiser-houndstooth-2.png',
+          '/images/saree-organiser-houndstooth-3.jpg',
+          '/images/saree-organiser-houndstooth-4.jpg'
+        ]
+      },
+      { 
+        name: 'Coffee Brown Floral', 
+        hex: '#5c3a21',
+        images: [
+          '/images/saree-organiser-brown-floral-1.jpg',
+          '/images/saree-organiser-brown-floral-2.jpg',
+          '/images/saree-organiser-brown-floral-3.jpg',
+          '/images/saree-organiser-brown-floral-4.jpg'
+        ]
+      },
+      { 
+        name: 'Beige Geometric Grid', 
+        hex: '#d4ccb8',
+        images: [
+          '/images/saree-organiser-beige-geometric-1.jpg',
+          '/images/saree-organiser-beige-geometric-2.jpg',
+          '/images/saree-organiser-beige-geometric-3.jpg',
+          '/images/saree-organiser-beige-geometric-4.jpg',
+          '/images/saree-organiser-beige-geometric-5.jpg'
+        ]
+      }
     ],
     packs: [
       { qty: 1, label: '1', price: 499, mrp: 799, savings: 'Save ₹300' },
@@ -132,7 +170,7 @@ export const products = [
     category: 'Wardrobe Organizers',
     categorySlug: 'jewel-organiser',
     rating: 4.8,
-    reviewCount: 64,
+    reviewCount: 65,
     inStock: true,
     basePrice: 349,
     mrp: 599,
@@ -148,10 +186,50 @@ export const products = [
     ],
     sizes: ['Compact Travel Size (Fits inside Handbags & Wardrobe Shelves)'],
     colors: [
-      { name: 'Ivory Cream Faux Leather', hex: '#fdfbf7' },
-      { name: 'Blush Powder Pink', hex: '#f43f5e' },
-      { name: 'Royal Navy Blue', hex: '#1e3a8a' },
-      { name: 'Emerald Velvet Green', hex: '#065f46' }
+      { 
+        name: 'Champagne Nude Beige', 
+        hex: '#e8ded1',
+        images: [
+          '/images/jewel-organiser-1.jpg',
+          '/images/jewel-organiser-2.jpg',
+          '/images/jewel-organiser-3.jpg',
+          '/images/jewel-organiser-4.jpg',
+          '/images/jewel-organiser-5.jpg'
+        ]
+      },
+      { 
+        name: 'Ivory Cream PU Leather', 
+        hex: '#fdfbf7',
+        images: [
+          '/images/jewel-organiser-white-1.jpg',
+          '/images/jewel-organiser-white-2.jpg',
+          '/images/jewel-organiser-white-3.jpg',
+          '/images/jewel-organiser-white-4.jpg',
+          '/images/jewel-organiser-white-5.jpg'
+        ]
+      },
+      { 
+        name: 'Classic Snow White', 
+        hex: '#ffffff',
+        images: [
+          '/images/jewel-organiser-pure-white-1.jpg',
+          '/images/jewel-organiser-pure-white-2.jpg',
+          '/images/jewel-organiser-pure-white-3.jpg',
+          '/images/jewel-organiser-pure-white-4.jpg',
+          '/images/jewel-organiser-pure-white-5.jpg'
+        ]
+      },
+      { 
+        name: 'Pastel Sky Blue', 
+        hex: '#38bdf8',
+        images: [
+          '/images/jewel-organiser-cyan-blue-1.jpg',
+          '/images/jewel-organiser-cyan-blue-2.jpg',
+          '/images/jewel-organiser-cyan-blue-3.jpg',
+          '/images/jewel-organiser-cyan-blue-4.jpg',
+          '/images/jewel-organiser-cyan-blue-5.jpg'
+        ]
+      }
     ],
     packs: [
       { qty: 1, label: '1', price: 349, mrp: 599, savings: 'Save ₹250' },
